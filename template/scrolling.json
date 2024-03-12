@@ -1,0 +1,14 @@
+{
+  "text": {
+    "textString": "Data",
+    "bigFont": true,
+    "scrollText": true,
+    "scrollTextDelay": 100,
+    "centerText": true,
+    "position": {
+      "x": 2,
+      "y": 2
+    },
+    "hexColor": "#FF00FF"
+  }
+}

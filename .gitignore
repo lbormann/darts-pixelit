@@ -1,0 +1,7 @@
+start-custom.bat
+build
+dist
+*.spec
+__pycache__
+NOTIZEN*.json
+autodarts-wled.py
