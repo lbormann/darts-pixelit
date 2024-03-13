@@ -2,24 +2,18 @@ PUSHD .
 python "autodarts-pixelit.py" ^
 -CON "127.0.0.1:8079" ^
 -PEPS "your-first-pixelit-ip" "your-secondary-pixelit-ip" ^
+-TP "C:\Users\Luca\Desktop\Programme\autodarts-desktop\autodarts-pixelit-templates" ^
 -BRI "255" ^
 -HFO "51" ^
 -HF "x" ^
--IDE "solid|lightgoldenrodyellow" ^
--G "4" "87" "26" "29" "93" "42" "64" ^
--M "4" "87" "26" "29" "93" "42" "64" ^
--B "solid|red1" "1|red1" "ps|3|5" ^
--PJ "solid|green1" ^
--PL "solid|red1" ^
--S26 "84" ^
--S45 "Phased" ^
--S41 "Phased" ^
--S60 "13" ^
--S80 "29|blueviolet|yellow|yellow1" "rainbow|blue|yellow|yellow1" "13|aliceblue|yellow|yellow1" ^
--S100 "27" ^
--S120 "8" ^
--S140 "ps|3" ^
--S180 "78" "9" ^
--A1 "1-60" "ps|2" "solid|yellow1" ^
--A2 "16-30" "blink|green1" "rainbow|yellow1" "blink|peachpuff2" ^
--A3 "61-120" "29|blueviolet|s125|i145|red1|green1|p4"
+-AS "call|Lets Play Darts -==-<" ^
+-IDE "board|throw" ^
+-G "board" ^
+-M "board" ^
+-B "dart|200" "dart0|200" "dart1|200" "dart2|200" "dart3|200" "dart4|200" "dart5|200" "dart6|200" "dart7|200" "dart8|200" "dart9|200" "dart10|200" "dart11|200" "dart12" ^
+-PJ "board" ^
+-PL "board" ^
+-S3 "points3" ^
+-S60 "points60" ^
+-A1 "1-180" "points" ^
+-DEB "1"

@@ -3,6 +3,9 @@
 
 Autodarts-pixelit controls your pixelit-installation(s) https://github.com/pixelit-project/PixelIt accordingly to the state of an https://autodarts.io game. A running instance of https://github.com/lbormann/autodarts-caller is needed that sends thrown points from https://autodarts.io to this application.
 
+Special thanks to user [Sini](https://discordapp.com/users/935394843625156688). He came up with the funny idea and developed the core code for controlling a Pixelit installation.
+
+
 
 ## COMPATIBILITY
 
@@ -23,7 +26,7 @@ Autodarts-pixelit controls your pixelit-installation(s) https://github.com/pixel
 
 #### Videos (Click to play):
 <!-- [![IMAGE_ALT](https://img.youtube.com/vi/fDXomw55vhI/hqdefault.jpg)](https://youtu.be/fDXomw55vhI) -->
-TODO
+COMING SOON
 
 #### Images:
 <!-- <img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/1.jpg?raw=true">
@@ -38,16 +41,16 @@ TODO
 <img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/9.jpg?raw=true" width="49%">
 <img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/10.jpg?raw=true" width="49%">
 </p> -->
-TODO
+COMING SOON
 
 ## Hardware
 
 Here is my currrent Hardware-Setup (You can google prices yourself):
 * Controller: 1x AZDelivery ESP32 D1 Mini
-* Led-Matrix: 1x TODO
-* Power adapter: 1x Mean Well LPV-100-8 60W 5V DC
-* Connector: TODO
-* Connector: TODO
+* Led-Matrix: 1x COMING SOON
+* Power adapter: 1x Mean Well LPV-100-5 40W 5V DC
+* Connector: COMING SOON
+* Connector: COMING SOON
 
 
 
@@ -112,9 +115,11 @@ Click on the shortcut to start the application.
 
 - -CON / --connection [OPTIONAL] [Default: "127.0.0.1:8079"] 
 - -PEPS / --pixel_endpoints [REQUIRED] [MULTIPLE ENTRIES POSSIBLE] 
+- -TP / --templates_path [REQUIRED] 
 - -BRI / --effect_brightness [OPTIONAL] [Default: 175] [Possible values: 1 .. 255] 
 - -HFO / --high_finish_on [OPTIONAL] [Default: None] [Possible values: 2 .. 170] 
 - -HF / --high_finish_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
+- -AS / --app_start_effects [OPTIONAL] [Default: None] [Possible values: See below] 
 - -IDE / --idle_effect [OPTIONAL] [Default: "solid|lightgoldenrodyellow"] [Possible values: See below] 
 - -G / --game_won_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -M / --match_won_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
@@ -134,6 +139,11 @@ Host address to data-feeder (autodarts-caller). By Default this is '127.0.0.1:80
 
 IP to your PIXELIT. You can define multiple entries. For example: '192.168.3.200' '192.168.3.201'.
 
+*`-TP / --templates_path`*
+
+Setup an absolute path where your json-templates are located.
+Make sure the given path doesn't reside inside main-directory (autodarts-caller).
+
 *`-BRI / --effect_brightness`*
 
 Brightness for PIXELIT-effects. You can choose a value between '1' and '255'. By default this is 10.
@@ -146,6 +156,11 @@ Define what a highfinish means for you. Choose a score-value between '2' and '17
 
 Controls your pixelit(s) when a high-finish occurs.
 Define one effect/preset/playlist or a list. If you define a list, the program will randomly choose at runtime. For examples see below!
+
+*`-AS / --app_start_effects`*
+
+Controls your pixelit(s) when the application starts
+Define an effect/preset/playlist that gets triggered. For examples see below!
 
 *`-IDE / --idle_effect`*
 
@@ -194,37 +209,17 @@ _ _ _ _ _ _ _ _ _ _
 #### Examples: 
 
 
-| Argument | [condition] | effect 1 | effect 2 | effect 3 | ... |
+| Argument | [condition] | template 1 | template 2 | template 3 | ... |
 | --  | -- | -- | --  | -- | -- | 
-|-B |  | solid\\|red1 | solid\\|blue2 | | | |
-|-A1 | 0-15 | 1\\|s255\\|i255\\|green1\\|red2 | solid\\|red1 | breathe\\|yellow1\\|blue2\\|s170\\|i40 | | |
-|-A2 | 16-60 | ps\\|3 | | | 
+|-B |  | dart\\|200 | dart0\\|200 | dart1\\|200 | dart2\\|200 | |
+|-A1 | 0-15 | points-bad | | | | |
+|-A2 | 16-60 | points-ok | | | | |
 
-The first argument-definition shows the event 'Busted': Busting will result in playing one of the 2 defined effects: solid (red) and solid (blue).
+The first argument-definition shows the event 'Busted': Busting will result in playing each template, one after another. The value 200 mean, 200ms delay between current and next template.
 
-The second argument-definition shows a 'score-area': recognized scores between 0 and 15 will result in playing one of the 3 effects: blink (ID: 1), breathe or solid. For every of those effects we defined different colors, speeds and intensities; only the effect-name/effect-ID is required; everything else is an option.
+The second argument-definition shows a 'score-area': recognized scores between 0 and 15 will result in playing template points-bad 
+The third argument-definition shows a 'score-area': recognized scores between 16 and 60 result in playing template points-ok
 
-The third argument-definition shows a 'score-area': recognized scores between 16 and 60 result in playing preset (or playlist) 3.
-
-* To set a preset or playlists, use the displayed ID in WLED! Moreover you can set a custom duration (Except -IDE)
-
-    syntax: **"ps|{ID}|{seconds}"**
-
-* To set an effect, use an pixelit-effect-name or the corresponding ID (https://github.com/Aircoookie/WLED/wiki/List-of-effects-and-palettes):
-
-    syntax: **"{'effect-name' or 'effect-ID'}|{primary-color-name}|{secondary-color-name}|{tertiary-color-name}"**
-
-* To set effect- speed, intensity, palette, duration (Except -IDE)
-
-    syntax: **"{'effect-name' or 'effect-ID'}|s{1-255}|i{1-255}|p{palette-ID}|d{seconds}"**
-
-* For color-name usage, validate that the color-name you want is available in the list!
-
-    validate here: **https://github.com/lbormann/autodarts-pixelit/blob/main/colors.txt**
-
-* To set an random effect, use 'x' or 'X' as effect-id
-
-    syntax: **"x"**
 
 * If don't understand have a look at the example file!
 
@@ -235,37 +230,11 @@ The third argument-definition shows a 'score-area': recognized scores between 16
 
 ## Community-Profiles
 
-| Argument | Tullaris#4778 | wusaaa#0578 | Sini#8190
+| Argument | USER#1234 | USER#1234 | USER#1234
 | --  | -- | -- | -- |
-| HF (Highfinish) | fire flicker | 4 87 26 29 93 42 64 | ps\\|1 ps\\|2 |
-| IDE (Idle) | solid\\|lightgoldenrodyellow | solid\\|lightgoldenrodyellow | ps\\|10 |
-| G (Game-won) | colorloop | 4 87 26 29 93 42 64 | ps\\|9 ps\\|11 |
-| M (Match-won) | running\\|orange\\|red1 | 4 87 26 29 93 42 64 | ps\\|3 ps\\|4 |
-| B (Busted) | fire 2012 | solid\\|red1 | ps\\|20 ps\\|21 |
-| S0 (score 0) | breathe\\|orange\\|red1 | | ps\\|5 ps\\|6 |
-| S3 (Score 3) | running | | |
-| S26 (Score 26) | dynamic | | ps\\|7 ps\\|8 |
-| S135 (Score 135) | | 78 9 | |
-| S140 (Score 140) | | 81 | |
-| S144 (Score 144) | | 78 9 | |
-| S153 (Score 153) | | 78 9 | |
-| S162 (Score 162) | | 78 9 | |
-| S171 (Score 171) | | 78 9 | |
-| S180 (Score 180) | rainbow | 78 9 | ps\\|12 ps\\|13 |
-| A1 (Area 1) | 0-14 solid\\|deeppink1 | 0-30 solid\\|orange | 0-25 ps\\|14 ps\\|15 |
-| A2 (Area 2) | 15-29 solid\\|blue | 31-60 solid\\|orange1 | 27-59 ps\\|16 ps\\|18 |
-| A3 (Area 3) | 30-44 solid\\|deepskyblue1 | 61-90 solid\\|yellow1 | 60-99 ps\\|17 ps\\|19 |
-| A4 (Area 4) | 45-59 solid\\|green | 91-120 solid\\|olivedrab4 | 100-179 ps\\|22 ps\\|23 |
-| A5 (Area 5) | 60-74 solid\\|chartreuse1 | 121-150 solid\\|olivedrab1 | |
-| A6 (Area 6) | 75-89 solid\\|brick | | |
-| A7 (Area 7) | 90-104 solid\\|tomato1 | | |
-| A8 (Area 8) | 105-119 solid\\|tan1 | | |
-| A9 (Area 9) | 120-134 solid\\|yellow1 | | |
-| A10 (Area 10) | 135-149 solid\\|purple1 | | |
-| A11 (Area 11) | 150-164 solid\\|orange | | |
-| A12 (Area 12) | 165-180 solid\\|red1 | | |
+COMING SOON
 
-Moreover you can find ready-to-go pixelit-presets in the community-folder; You can restore a preset-file in pixelit-ui.
+Moreover you can find ready-to-go pixelit-templates in the community-folder.
 
 
 

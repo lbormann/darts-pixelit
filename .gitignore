@@ -4,4 +4,4 @@ dist
 *.spec
 __pycache__
 NOTIZEN*.json
-autodarts-wled.py
+autodarts-pixelit-raw.py
