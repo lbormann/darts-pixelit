@@ -47,8 +47,8 @@ COMING SOON
 
 Here is my currrent Hardware-Setup (You can google prices yourself):
 * Controller: 1x AZDelivery ESP32 D1 Mini
-* Led-Matrix: 1x COMING SOON
-* Power adapter: 1x Mean Well LPV-100-5 40W 5V DC
+* LED-Matrix: 1x WS2812B RGB Flexible FCB Vollfarb-Pixelmatrix, 8x32 Pixels
+* Power adapter: 1x Mean Well LPV-60-5 40W 5V, 8AMP DC
 * Connector: COMING SOON
 * Connector: COMING SOON
 
@@ -116,7 +116,7 @@ Click on the shortcut to start the application.
 - -CON / --connection [OPTIONAL] [Default: "127.0.0.1:8079"] 
 - -PEPS / --pixel_endpoints [REQUIRED] [MULTIPLE ENTRIES POSSIBLE] 
 - -TP / --templates_path [REQUIRED] 
-- -BRI / --effect_brightness [OPTIONAL] [Default: 175] [Possible values: 1 .. 255] 
+- -BRI / --effect_brightness [OPTIONAL] [Default: 20] [Possible values: 1 .. 255] 
 - -HFO / --high_finish_on [OPTIONAL] [Default: None] [Possible values: 2 .. 170] 
 - -HF / --high_finish_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -AS / --app_start_effects [OPTIONAL] [Default: None] [Possible values: See below] 
@@ -141,12 +141,12 @@ IP to your PIXELIT. You can define multiple entries. For example: '192.168.3.200
 
 *`-TP / --templates_path`*
 
-Setup an absolute path where your json-templates are located.
+Setup an absolute path where your templates (*.json) are located.
 Make sure the given path doesn't reside inside main-directory (autodarts-caller).
 
 *`-BRI / --effect_brightness`*
 
-Brightness for PIXELIT-effects. You can choose a value between '1' and '255'. By default this is 10.
+Brightness for PIXELIT-effects. You can choose a value between '1' and '255'. By default this is 20.
 
 *`-HFO / --high_finish_on`*
 
@@ -155,52 +155,52 @@ Define what a highfinish means for you. Choose a score-value between '2' and '17
 *`-HF / --high_finish_effects`*
 
 Controls your pixelit(s) when a high-finish occurs.
-Define one effect/preset/playlist or a list. If you define a list, the program will randomly choose at runtime. For examples see below!
+Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
 *`-AS / --app_start_effects`*
 
 Controls your pixelit(s) when the application starts
-Define an effect/preset/playlist that gets triggered. For examples see below!
+Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
 *`-IDE / --idle_effect`*
 
 Controls your pixelit(s) when dart-pulling occurs or a configurated duration pasts.
-Define an effect/preset/playlist that gets triggered. For examples see below!
+Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
 *`-G / --game_won_effects`*
 
 Controls your pixelit(s) when a game won occurs.
-Define one effect/preset/playlist or a list. If you define a list, the program will randomly choose at runtime. For examples see below!
+Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
 *`-M / --match_won_effects`*
 
 Controls your pixelit(s) when a match won occurs.
-Define one effect/preset/playlist or a list. If you define a list, the program will randomly choose at runtime. For examples see below!
+Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
 *`-B / --busted_effects`*
 
 Controls your pixelit(s) when a bust occurs.
-Define one effect/preset/playlist or a list. If you define a list, the program will randomly choose at runtime. For examples see below!
+Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
 *`-PJ / --player_joined_effects`*
 
 Controls your pixelit(s) when a player-join occurs.
-Define one effect/preset/playlist or a list. If you define a list, the program will randomly choose at runtime. For examples see below!
+Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
 *`-PL / --player_left_effects`*
 
 Controls your pixelit(s) when a player-left occurs.
-Define one effect/preset/playlist or a list. If you define a list, the program will randomly choose at runtime. For examples see below!
+Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
 *`-S{0-180} / --score_{0-180}_effects`*
 
 Controls your pixelit(s) when a specific score occurs. You can define every score-value between 0 and 180.
-Define one effect/preset/playlist or a list. If you define a list, the program will randomly choose at runtime. For examples see below!
+Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
 *`-A{1-12} / --score_area_{1-12}_effects`*
 
 Besides the definition of single score-values you can define up to 12 score-areas.
-Define one effect/preset/playlist or a list. If you define a list, the program will randomly choose at runtime. For examples see below!
+Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
 
 _ _ _ _ _ _ _ _ _ _
@@ -215,10 +215,10 @@ _ _ _ _ _ _ _ _ _ _
 |-A1 | 0-15 | points-bad | | | | |
 |-A2 | 16-60 | points-ok | | | | |
 
-The first argument-definition shows the event 'Busted': Busting will result in playing templates (dart, dart0, dart1, ...) in this order. The value 'd:200' defines 200ms delay between current and next template. The value 'b:10' defines custom brightness for a template.
+The first argument-definition shows the event 'Busted': Busting will result in displaying templates in order you define them (dart, dart0, dart1, ...). The value 'd:200' defines 200ms delay between current and next template. The value 'b:10' defines custom brightness for a template.
 
-The second argument-definition shows a 'score-area': recognized scores between 0 and 15 will result in playing template 'points-bad' 
-The third argument-definition shows a 'score-area': recognized scores between 16 and 60 result in playing template 'points-ok'
+The second argument-definition shows a 'score-area': recognized scores between 0 and 15 will result in displaying template 'points-bad' 
+The third argument-definition shows a 'score-area': recognized scores between 16 and 60 result in displaying template 'points-ok'
 
 
 * If don't understand have a look at the example file!
