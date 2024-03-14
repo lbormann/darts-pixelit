@@ -112,7 +112,7 @@ def broadcast_intern(endpoint, data):
         displayData = json.dumps(data["template"], ensure_ascii=False).encode('utf8')
         # ppi("PIXEL IT DATA: ", displayData)
         r = requests.post('http://' + endpoint + '/api/screen', displayData, headers={'Content-Type': 'application/data'})
-        #   ppi("display return: " + r.text)
+        # ppi("display return: " + r.text)
     except Exception as e:
         ppe("Error while sending to display.", e)
         return
