@@ -12,6 +12,7 @@ import threading
 import logging
 import time
 import ast
+import re
 
 sh = logging.StreamHandler()
 sh.setLevel(logging.INFO)
@@ -26,7 +27,7 @@ logger.addHandler(sh)
 
 VERSION = '1.0.0'
 
-DEFAULT_EFFECT_BRIGHTNESS = 175
+DEFAULT_EFFECT_BRIGHTNESS = 20
 
 EFFECT_PARAMETER_SEPARATOR = "|"
 BOGEY_NUMBERS = [169, 168, 166, 165, 163, 162, 159]
@@ -78,14 +79,24 @@ def check_paths(main_directory, templates_path):
     return errors
 
 
-def control_pixelit(effect_list, ptext, message_overwrite = None):    
-    ppi(ptext + ' - PIXELIT')
+def control_pixelit(effect_list, ptext, message_overwrite = None, wake_up = False):    
+    ppi(ptext + ' - PIXELIT!')
+
+    if wake_up:
+        broadcast({"template": {"sleepMode": False}})
+
+    if effect_list is None:
+        return
+
     for effect in effect_list:
+        em = effect.copy()
+        if "brightness" not in em["template"]:
+            em["template"]["brightness"] = EFFECT_BRIGHTNESS
         if message_overwrite is not None and message_overwrite != "":
-            effect["template"]["text"]["textString"] = message_overwrite
-        broadcast(effect)
-        if effect["delay"] != 0:
-            time.sleep(effect["delay"] / 1000)
+            em["template"]["text"]["textString"] = message_overwrite
+        broadcast(em)
+        if em["delay"] != 0:
+            time.sleep(em["delay"] / 1000)
   
 def broadcast(data):
     global PIXELIT_ENDPOINTS
@@ -98,12 +109,12 @@ def broadcast(data):
 
 def broadcast_intern(endpoint, data):
     try: 
-      displayData = json.dumps(data["template"], ensure_ascii=False).encode('utf8')
-    #   ppi("DISPLAY: ", displayData)
-      r = requests.post('http://' + endpoint + '/api/screen', displayData, headers={'Content-Type': 'application/data'})
-    #   ppi("display return: " + r.text)
+        displayData = json.dumps(data["template"], ensure_ascii=False).encode('utf8')
+        # ppi("PIXEL IT DATA: ", displayData)
+        r = requests.post('http://' + endpoint + '/api/screen', displayData, headers={'Content-Type': 'application/data'})
+        #   ppi("display return: " + r.text)
     except Exception as e:
-        # ppe("Error while sending to display.", e)
+        ppe("Error while sending to display.", e)
         return
 
 
@@ -115,35 +126,44 @@ def load_template(template_name):
     return data
 
 def parse_effects_argument(effects_argument):
-    if effects_argument == None:
+    if effects_argument is None:
         return effects_argument
 
     parsed_list = list()
     for effect in effects_argument:
-        # ppi("EFFEKT: " + str(effect))
         try:
             effect_params = effect.split(EFFECT_PARAMETER_SEPARATOR)
-            count_params = len(effect_params)
             state = {"template": None, "delay": 0}
 
             # template-name
             effect_template_name = effect_params[0].strip().lower()
             state["template"] = load_template(effect_template_name)
 
-            # template-message | template-delay
-            if count_params > 1:
-                effect_template_message = effect_params[1].strip()
-                if effect_template_message != "":
-                    if effect_template_message.isdigit() == True:
-                        state["delay"] = int(effect_template_message)
-                    else:
-                        state["template"]["text"]["textString"] = effect_template_message
+            pattern = r'(?:t:(?P<t>\w+))|(?:d:(?P<d>\d+))|(?:b:(?P<b>\d+))'
+            matches = re.finditer(pattern, effect)
 
-            # template-delay
-            if count_params > 2:
-                effect_template_delay = effect_params[2].strip()
-                if effect_template_delay != "" and effect_template_delay.isdigit() == True:
-                    state["delay"] = int(effect_template_delay)
+            t_value = None
+            d_value = None
+            b_value = None
+
+            for match in matches:
+                group_dict = match.groupdict()
+                if group_dict['t']:
+                    t_value = group_dict['t']
+                elif group_dict['d']:
+                    d_value = int(group_dict['d'])
+                elif group_dict['b']:
+                    b_value = int(group_dict['b'])
+
+            if t_value is not None:
+                state["template"]["text"]["textString"] = t_value
+                # ppi("t:", t_value)
+            if d_value is not None:
+                state["delay"] = d_value
+                # ppi("d:", d_value)
+            if b_value is not None:
+                state["template"]["brightness"] = b_value
+                # ppi("b:", b_value)
                     
             parsed_list.append(state)
         except Exception as e:
@@ -354,13 +374,8 @@ if __name__ == "__main__":
     except Exception as e:
         ppe("Connect failed: ", e)
 
-    if APP_START_EFFECTS is not None:
-        control_pixelit(APP_START_EFFECTS, "App-started")
+
+    control_pixelit(APP_START_EFFECTS, "App-started", None, True)
 
 
 time.sleep(30)
-    
-
-
-
-   

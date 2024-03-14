@@ -120,7 +120,7 @@ Click on the shortcut to start the application.
 - -HFO / --high_finish_on [OPTIONAL] [Default: None] [Possible values: 2 .. 170] 
 - -HF / --high_finish_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -AS / --app_start_effects [OPTIONAL] [Default: None] [Possible values: See below] 
-- -IDE / --idle_effect [OPTIONAL] [Default: "solid|lightgoldenrodyellow"] [Possible values: See below] 
+- -IDE / --idle_effect [OPTIONAL] [Default: None] [Possible values: See below] 
 - -G / --game_won_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -M / --match_won_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -B / --busted_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
@@ -211,14 +211,14 @@ _ _ _ _ _ _ _ _ _ _
 
 | Argument | [condition] | template 1 | template 2 | template 3 | ... |
 | --  | -- | -- | --  | -- | -- | 
-|-B |  | dart\\|200 | dart0\\|200 | dart1\\|200 | dart2\\|200 | |
+|-B |  | dart\\|d:200\\|b:10 | dart0\\|d:200\\|b:20 | dart1\\|d:200\\|b:30 | dart2\\|b:50 | |
 |-A1 | 0-15 | points-bad | | | | |
 |-A2 | 16-60 | points-ok | | | | |
 
-The first argument-definition shows the event 'Busted': Busting will result in playing each template, one after another. The value 200 mean, 200ms delay between current and next template.
+The first argument-definition shows the event 'Busted': Busting will result in playing templates (dart, dart0, dart1, ...) in this order. The value 'd:200' defines 200ms delay between current and next template. The value 'b:10' defines custom brightness for a template.
 
-The second argument-definition shows a 'score-area': recognized scores between 0 and 15 will result in playing template points-bad 
-The third argument-definition shows a 'score-area': recognized scores between 16 and 60 result in playing template points-ok
+The second argument-definition shows a 'score-area': recognized scores between 0 and 15 will result in playing template 'points-bad' 
+The third argument-definition shows a 'score-area': recognized scores between 16 and 60 result in playing template 'points-ok'
 
 
 * If don't understand have a look at the example file!
