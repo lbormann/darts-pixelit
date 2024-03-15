@@ -97,7 +97,7 @@ Go to download-directory and type:
 
 Create a shortcut of the executable; right click on the shortcut -> select properties -> add arguments in the target input at the end of the text field.
 
-Example: C:\Downloads\autodarts-pixelit.exe -PEPS "your-first-pixelit-ip" "your-second-pixelit-ip"
+Example: C:\Downloads\autodarts-pixelit.exe -PEPS "your-first-pixelit-ip" "your-second-pixelit-ip" -TP "absolute-path-to-your-template-files"
 
 Save changes.
 Click on the shortcut to start the application.

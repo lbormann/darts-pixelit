@@ -233,20 +233,33 @@ def process_variant_x01(msg):
         control_pixelit(IDLE_EFFECT, 'Game-started')
     
 
+def build_data_feeder_url():    
+    server_host = CON.replace('ws://', '').replace('wss://', '')
+    server_url = 'wss://' + server_host
+    try:
+        ws = websocket.create_connection(server_url, sslopt={"cert_reqs": ssl.CERT_NONE})
+        ws.close()
+    except Exception as e_ws:
+        try:
+            server_url = 'ws://' + server_host
+            ws = websocket.create_connection(server_url)
+            ws.close()
+        except:
+            pass
+    return server_url
+
 def connect_data_feeder():
     def process(*args):
         global WS_DATA_FEEDER
         websocket.enableTrace(False)
-        data_feeder_host = CON
-        if CON.startswith('wss://') == False:
-            data_feeder_host = 'wss://' + CON
-        WS_DATA_FEEDER = websocket.WebSocketApp(data_feeder_host,
+
+        WS_DATA_FEEDER = websocket.WebSocketApp(build_data_feeder_url(),
                                 on_open = on_open_data_feeder,
                                 on_message = on_message_data_feeder,
                                 on_error = on_error_data_feeder,
                                 on_close = on_close_data_feeder)
-
         WS_DATA_FEEDER.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
+
     threading.Thread(target=process).start()
 
 def on_open_data_feeder(ws):
