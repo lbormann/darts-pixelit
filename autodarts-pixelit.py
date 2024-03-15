@@ -208,8 +208,8 @@ def process_variant_x01(msg):
             if area_found == False:
                 ppi('Darts-thrown: ' + val + ' - NOT configured!')
 
-    elif msg['event'] == 'darts-pulled' and IDLE_EFFECT is not None:
-        control_pixelit(IDLE_EFFECT, 'Darts-pulled')
+    elif msg['event'] == 'darts-pulled' and IDLE_EFFECTS is not None:
+        control_pixelit(IDLE_EFFECTS, 'Darts-pulled')
 
     elif msg['event'] == 'busted' and BUSTED_EFFECTS is not None:
         control_pixelit(BUSTED_EFFECTS, 'Busted!')
@@ -226,11 +226,11 @@ def process_variant_x01(msg):
         elif MATCH_WON_EFFECTS is not None:
             control_pixelit(MATCH_WON_EFFECTS, 'Match-won', "MATCH WON")
 
-    elif msg['event'] == 'match-started' and IDLE_EFFECT is not None:
-        control_pixelit(IDLE_EFFECT, 'Match-started')
+    elif msg['event'] == 'match-started' and IDLE_EFFECTS is not None:
+        control_pixelit(IDLE_EFFECTS, 'Match-started')
 
-    elif msg['event'] == 'game-started' and IDLE_EFFECT is not None:
-        control_pixelit(IDLE_EFFECT, 'Game-started')
+    elif msg['event'] == 'game-started' and IDLE_EFFECTS is not None:
+        control_pixelit(IDLE_EFFECTS, 'Game-started')
     
 
 def build_data_feeder_url():    
@@ -310,7 +310,7 @@ if __name__ == "__main__":
     ap.add_argument("-HFO", "--high_finish_on", type=int, choices=range(1, 171), default=None, required=False, help="Individual score for highfinish")
     ap.add_argument("-HF", "--high_finish_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when high-finish occurs")
     ap.add_argument("-AS", "--app_start_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when app starts")
-    ap.add_argument("-IDE", "--idle_effect", default=None, required=False, nargs='*', help="PIXELIT effect-definition when waiting for throw")
+    ap.add_argument("-IDE", "--idle_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when waiting for throw")
     ap.add_argument("-G", "--game_won_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when game won occurs")
     ap.add_argument("-M", "--match_won_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when match won occurs")
     ap.add_argument("-B", "--busted_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when bust occurs")
@@ -363,7 +363,7 @@ if __name__ == "__main__":
         sys.exit()  
     
     APP_START_EFFECTS = parse_effects_argument(args['app_start_effects'])
-    IDLE_EFFECT = parse_effects_argument(args['idle_effect'])
+    IDLE_EFFECTS = parse_effects_argument(args['idle_effects'])
     GAME_WON_EFFECTS = parse_effects_argument(args['game_won_effects'])
     MATCH_WON_EFFECTS = parse_effects_argument(args['match_won_effects'])
     BUSTED_EFFECTS = parse_effects_argument(args['busted_effects'])

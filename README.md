@@ -119,8 +119,8 @@ Click on the shortcut to start the application.
 - -BRI / --effect_brightness [OPTIONAL] [Default: 20] [Possible values: 1 .. 255] 
 - -HFO / --high_finish_on [OPTIONAL] [Default: None] [Possible values: 2 .. 170] 
 - -HF / --high_finish_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
-- -AS / --app_start_effects [OPTIONAL] [Default: None] [Possible values: See below] 
-- -IDE / --idle_effect [OPTIONAL] [Default: None] [Possible values: See below] 
+- -AS / --app_start_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
+- -IDE / --idle_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -G / --game_won_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -M / --match_won_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -B / --busted_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
@@ -162,9 +162,9 @@ Define one template or a list. If you define a list, the program will display te
 Controls your pixelit(s) when the application starts
 Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
-*`-IDE / --idle_effect`*
+*`-IDE / --idle_effects`*
 
-Controls your pixelit(s) when dart-pulling occurs or a configurated duration pasts.
+Controls your pixelit(s) when dart-pulling occurs.
 Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
 *`-G / --game_won_effects`*
