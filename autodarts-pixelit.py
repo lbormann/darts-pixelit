@@ -233,8 +233,8 @@ def process_variant_x01(msg):
         control_pixelit(IDLE_EFFECTS, 'Game-started')
     
 
-def build_data_feeder_url():    
-    server_host = CON.replace('ws://', '').replace('wss://', '')
+def build_data_feeder_url():
+    server_host = CON.replace('ws://', '').replace('wss://', '').replace('http://', '').replace('https://', '')
     server_url = 'wss://' + server_host
     try:
         ws = websocket.create_connection(server_url, sslopt={"cert_reqs": ssl.CERT_NONE})
