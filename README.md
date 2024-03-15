@@ -107,7 +107,7 @@ Click on the shortcut to start the application.
 
 #### Example: Linux
 
-    python3 autodarts-pixelit.py -PEPS "your-pixelit-ip"
+    python3 autodarts-pixelit.py -PEPS "your-pixelit-ip" -TP "absolute-path-to-your-template-files"
 
 
 
