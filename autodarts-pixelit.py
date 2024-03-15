@@ -185,10 +185,10 @@ def parse_score_area_effects_argument(score_area_effects_arguments):
 
 def process_lobby(msg):
     if msg['action'] == 'player-joined' and PLAYER_JOINED_EFFECTS != None:
-        control_pixelit(PLAYER_JOINED_EFFECTS, 'Player joined!', msg['player'])    
+        control_pixelit(PLAYER_JOINED_EFFECTS, 'Player joined!', msg['player'] + ' joined')    
     
     elif msg['action'] == 'player-left' and PLAYER_LEFT_EFFECTS != None:
-        control_pixelit(PLAYER_LEFT_EFFECTS, 'Player left!', msg['player'])    
+        control_pixelit(PLAYER_LEFT_EFFECTS, 'Player left!', msg['player'] + ' left')    
 
 def process_variant_x01(msg):
     if msg['event'] == 'darts-thrown':
