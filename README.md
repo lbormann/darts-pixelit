@@ -121,6 +121,8 @@ Click on the shortcut to start the application.
 - -HF / --high_finish_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -AS / --app_start_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -IDE / --idle_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
+- -GS / --game_start_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
+- -MS / --match_start_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -G / --game_won_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -M / --match_won_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
 - -B / --busted_effects [OPTIONAL] [MULTIPLE ENTRIES POSSIBLE] [Default: None] [Possible values: See below] 
@@ -142,7 +144,7 @@ IP to your PIXELIT. You can define multiple entries. For example: '192.168.3.200
 *`-TP / --templates_path`*
 
 Setup an absolute path where your templates (*.json) are located.
-Make sure the given path doesn't reside inside main-directory (autodarts-caller).
+Make sure the given path doesn't reside inside main-directory (autodarts-pixelit).
 
 *`-BRI / --effect_brightness`*
 
@@ -165,6 +167,16 @@ Define one template or a list. If you define a list, the program will display te
 *`-IDE / --idle_effects`*
 
 Controls your pixelit(s) when dart-pulling occurs.
+Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+
+*`-GS / --game_start_effects`*
+
+Controls your pixelit(s) when a game-start occurs.
+Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+
+*`-MS / --match_start_effects`*
+
+Controls your pixelit(s) when a match-start occurs.
 Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
 
 *`-G / --game_won_effects`*
@@ -211,21 +223,44 @@ _ _ _ _ _ _ _ _ _ _
 
 | Argument | [condition] | template 1 | template 2 | template 3 | ... |
 | --  | -- | -- | --  | -- | -- | 
-|-B |  | dart\\|d:200\\|b:10 | dart0\\|d:200\\|b:20 | dart1\\|d:200\\|b:30 | dart2\\|b:50 | |
+|-AS |  | call\\|t:Lets{}Play{}Darts{}-==-< | | | | | |
+|-G |  | board\\|t:Gameshot!{}{playername}{}-{}{score} | | | | |
 |-A1 | 0-15 | points-bad | | | | |
 |-A2 | 16-60 | points-ok | | | | |
+|-B |  | dart\\|d:200\\|b:10 | dart0\\|d:200\\|b:20 | dart1\\|d:200\\|b:30 | dart2\\|b:50 | |
 
-The first argument-definition shows the event 'Busted': Busting will result in displaying templates in order you define them (dart, dart0, dart1, ...). The value 'd:200' defines 200ms delay between current and next template. The value 'b:10' defines custom brightness for a template.
 
-The second argument-definition shows a 'score-area': recognized scores between 0 and 15 will result in displaying template 'points-bad' 
-The third argument-definition shows a 'score-area': recognized scores between 16 and 60 result in displaying template 'points-ok'
+* The first argument-definition shows the event 'App-start': on app start, a template-file with name 'call.json' will be displayed with a text 'Lets Play Darts -==-<'. Notice '{}' (curly braces) in the argument definition: It's placeholder for an empty space character in the given text (t:). This rule applies on every argument definition`s text. So.. you can't define an argument-text with 'call|t:Lets Play Darts -==-<'. That won't work properly.
 
+* The second argument-definition shows the event 'Gameshot': on gameshot, a template-file with name 'board.json' will be displayed. Moreover a text 'Gameshot! Spielername - Finish-score' will be displayed. Notice '{playername}' and {'score'}. Those are available variables for busted-event, which will be replaced on runtime with corresponding values. You can find a list of text-variables [here](#Text-variables).
+
+* The third argument-definition shows a 'score-area': recognized scores between 0 and 15 will result in displaying template 'points-bad' 
+
+* The fourth argument-definition shows a 'score-area': recognized scores between 16 and 60 result in displaying template 'points-ok'
+
+* The fifth argument-definition shows the event 'Busted': Busting will result in displaying templates in order you define them (dart, dart0, dart1, ...). The value 'd:200' defines 200ms delay between current and next template. The value 'b:10' defines custom brightness for a template.
 
 * If don't understand have a look at the example file!
 
     learn at: **start.bat**
 
 
+
+#### Text-variables:
+
+| Argument | Variables |
+| -HF | {playername}, {score} | 
+| -AS | | 
+| -IDE | |
+| -MS | {game-mode}, {game-mode-extra}, {playername} | 
+| -GS | {game-mode}, {game-mode-extra}, {playername} | 
+| -G | {playername}, {score} | 
+| -M | {playername}, {score} | 
+| -B | | 
+| -PJ | {playername} | 
+| -PL | {playername} | 
+| -S(1-180) | {playername}, {score} | 
+| -A(1-12) | {playername}, {score} | 
 
 
 ## Community-Profiles

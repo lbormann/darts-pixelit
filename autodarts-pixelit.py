@@ -25,7 +25,7 @@ logger.addHandler(sh)
 
 
 
-VERSION = '1.0.0'
+VERSION = '1.1.0'
 
 DEFAULT_EFFECT_BRIGHTNESS = 20
 
@@ -79,7 +79,7 @@ def check_paths(main_directory, templates_path):
     return errors
 
 
-def control_pixelit(effect_list, ptext, message_overwrite = None, wake_up = False):    
+def control_pixelit(effect_list, ptext, variables = {}, wake_up = False):    
     ppi(ptext + ' - PIXELIT!')
 
     if wake_up:
@@ -92,8 +92,12 @@ def control_pixelit(effect_list, ptext, message_overwrite = None, wake_up = Fals
         em = effect.copy()
         if "brightness" not in em["template"]:
             em["template"]["brightness"] = EFFECT_BRIGHTNESS
-        if message_overwrite is not None and message_overwrite != "":
-            em["template"]["text"]["textString"] = message_overwrite
+
+        user_text = em["template"]["text"]["textString"]
+        user_text = user_text.replace("{}", " ")
+        for key, value in variables.items():
+            user_text = user_text.replace("{" + key + "}", value)
+        em["template"]["text"]["textString"] = user_text
         broadcast(em)
         if em["delay"] != 0:
             time.sleep(em["delay"] / 1000)
@@ -132,6 +136,7 @@ def parse_effects_argument(effects_argument):
     parsed_list = list()
     for effect in effects_argument:
         try:
+            
             effect_params = effect.split(EFFECT_PARAMETER_SEPARATOR)
             state = {"template": None, "delay": 0}
 
@@ -139,7 +144,7 @@ def parse_effects_argument(effects_argument):
             effect_template_name = effect_params[0].strip().lower()
             state["template"] = load_template(effect_template_name)
 
-            pattern = r'(?:t:(?P<t>\w+))|(?:d:(?P<d>\d+))|(?:b:(?P<b>\d+))'
+            pattern = r'(?:t:(?P<t>[^\|]+))|(?:d:(?P<d>\d+))|(?:b:(?P<b>\d+))'
             matches = re.finditer(pattern, effect)
 
             t_value = None
@@ -182,19 +187,24 @@ def parse_score_area_effects_argument(score_area_effects_arguments):
     else:
         raise Exception(score_area_effects_arguments[0] + ' is not a valid score-area')
 
+    
 
 def process_lobby(msg):
     if msg['action'] == 'player-joined' and PLAYER_JOINED_EFFECTS != None:
-        control_pixelit(PLAYER_JOINED_EFFECTS, 'Player joined!', msg['player'] + ' joined')    
+        variables = {'playername': msg['player']}
+        control_pixelit(PLAYER_JOINED_EFFECTS, 'Player joined!', variables)    
     
     elif msg['action'] == 'player-left' and PLAYER_LEFT_EFFECTS != None:
-        control_pixelit(PLAYER_LEFT_EFFECTS, 'Player left!', msg['player'] + ' left')    
+        variables = {'playername': msg['player']}
+        control_pixelit(PLAYER_LEFT_EFFECTS, 'Player left!', variables)    
 
 def process_variant_x01(msg):
     if msg['event'] == 'darts-thrown':
         val = str(msg['game']['dartValue'])
+        variables = {'score': val}
+
         if SCORE_EFFECTS[val] is not None:
-            control_pixelit(SCORE_EFFECTS[val], 'Darts-thrown: ' + val, val)
+            control_pixelit(SCORE_EFFECTS[val], 'Darts-thrown: ' + val, variables)
         else:
             area_found = False
             ival = int(val)
@@ -202,7 +212,7 @@ def process_variant_x01(msg):
                 if SCORE_AREA_EFFECTS[SAE] is not None:
                     ((area_from, area_to), AREA_EFFECTS) = SCORE_AREA_EFFECTS[SAE]
                     if ival >= area_from and ival <= area_to:
-                        control_pixelit(AREA_EFFECTS, 'Darts-thrown: ' + val, str(val))
+                        control_pixelit(AREA_EFFECTS, 'Darts-thrown: ' + val, variables)
                         area_found = True
                         break
             if area_found == False:
@@ -215,22 +225,34 @@ def process_variant_x01(msg):
         control_pixelit(BUSTED_EFFECTS, 'Busted!')
 
     elif msg['event'] == 'game-won' and GAME_WON_EFFECTS is not None:
-        if HIGH_FINISH_ON is not None and int(msg['game']['dartsThrownValue']) >= HIGH_FINISH_ON and HIGH_FINISH_EFFECTS is not None:
-            control_pixelit(HIGH_FINISH_EFFECTS, 'Game-won - HIGHFINISH')
+        score = msg['game']['dartsThrownValue']
+        variables = {'playername': msg['player'], 'score': score}
+        if HIGH_FINISH_ON is not None and int(score) >= HIGH_FINISH_ON and HIGH_FINISH_EFFECTS is not None:
+            control_pixelit(HIGH_FINISH_EFFECTS, 'Game-won - HIGHFINISH', variables)
         elif GAME_WON_EFFECTS is not None:
-            control_pixelit(GAME_WON_EFFECTS, 'Game-won', "GAME WON")
+            control_pixelit(GAME_WON_EFFECTS, 'Game-won', "GAME WON", variables)
 
     elif msg['event'] == 'match-won' and MATCH_WON_EFFECTS is not None:
-        if HIGH_FINISH_ON is not None and int(msg['game']['dartsThrownValue']) >= HIGH_FINISH_ON and HIGH_FINISH_EFFECTS is not None:
-            control_pixelit(HIGH_FINISH_EFFECTS, 'Match-won - HIGHFINISH')
+        score = msg['game']['dartsThrownValue']
+        variables = {'playername': msg['player'], 'score': score}
+        if HIGH_FINISH_ON is not None and int(score) >= HIGH_FINISH_ON and HIGH_FINISH_EFFECTS is not None:
+            control_pixelit(HIGH_FINISH_EFFECTS, 'Match-won - HIGHFINISH', variables)
         elif MATCH_WON_EFFECTS is not None:
-            control_pixelit(MATCH_WON_EFFECTS, 'Match-won', "MATCH WON")
+            control_pixelit(MATCH_WON_EFFECTS, 'Match-won', "MATCH WON", variables)
 
-    elif msg['event'] == 'match-started' and IDLE_EFFECTS is not None:
-        control_pixelit(IDLE_EFFECTS, 'Match-started')
+    elif msg['event'] == 'match-started' and MATCH_START_EFFECTS is not None:
+        variables = {'playername': msg['player'], 
+                     'game-mode': msg['game']['mode'], 
+                     'game-mode-extra': msg['game']['pointsStart']
+                     }
+        control_pixelit(MATCH_START_EFFECTS, 'Match-started', variables)
 
-    elif msg['event'] == 'game-started' and IDLE_EFFECTS is not None:
-        control_pixelit(IDLE_EFFECTS, 'Game-started')
+    elif msg['event'] == 'game-started' and GAME_START_EFFECTS is not None:
+        variables = {'playername': msg['player'], 
+                    'game-mode': msg['game']['mode'], 
+                    'game-mode-extra': msg['game']['pointsStart']
+                    }
+        control_pixelit(GAME_START_EFFECTS, 'Game-started', variables)
     
 
 def build_data_feeder_url():
@@ -311,6 +333,8 @@ if __name__ == "__main__":
     ap.add_argument("-HF", "--high_finish_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when high-finish occurs")
     ap.add_argument("-AS", "--app_start_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when app starts")
     ap.add_argument("-IDE", "--idle_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when waiting for throw")
+    ap.add_argument("-GS", "--game_start_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when game-start occurs")
+    ap.add_argument("-MS", "--match_start_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when match-start occurs")
     ap.add_argument("-G", "--game_won_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when game won occurs")
     ap.add_argument("-M", "--match_won_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when match won occurs")
     ap.add_argument("-B", "--busted_effects", default=None, required=False, nargs='*', help="PIXELIT effect-definition when bust occurs")
@@ -363,6 +387,8 @@ if __name__ == "__main__":
         sys.exit()  
     
     APP_START_EFFECTS = parse_effects_argument(args['app_start_effects'])
+    GAME_START_EFFECTS = parse_effects_argument(args['game_start_effects'])
+    MATCH_START_EFFECTS = parse_effects_argument(args['match_start_effects'])
     IDLE_EFFECTS = parse_effects_argument(args['idle_effects'])
     GAME_WON_EFFECTS = parse_effects_argument(args['game_won_effects'])
     MATCH_WON_EFFECTS = parse_effects_argument(args['match_won_effects'])
@@ -388,7 +414,7 @@ if __name__ == "__main__":
         ppe("Connect failed: ", e)
 
 
-    control_pixelit(APP_START_EFFECTS, "App-started", None, True)
+    control_pixelit(APP_START_EFFECTS, "App-started", wake_up=True)
 
 
 time.sleep(30)
