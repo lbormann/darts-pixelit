@@ -240,15 +240,17 @@ _ _ _ _ _ _ _ _ _ _
 
 * The fifth argument-definition shows the event 'Busted': Busting will result in displaying templates in order you define them (dart, dart0, dart1, ...). The value 'd:200' defines 200ms delay between current and next template. The value 'b:10' defines custom brightness for a template.
 
-* If don't understand have a look at the example file!
+* If you don't understand have a look at the example file!
 
     learn at: **start.bat**
 
 
 
-#### Text-variables:
+### Text-variables
+
 
 | Argument | Variables |
+| --  | -- |
 | -HF | {playername}, {score} | 
 | -AS | | 
 | -IDE | |
