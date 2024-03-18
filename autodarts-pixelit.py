@@ -95,7 +95,7 @@ def control_pixelit(effect_list, ptext, variables = {}, wake_up = False):
         if "brightness" not in em:
             em["brightness"] = EFFECT_BRIGHTNESS
 
-        if em["text"]["textString"] and em["text"]["textString"] != "":
+        if "text" in em and "textString" in em["text"] and em["text"]["textString"] and em["text"]["textString"] != "":
             user_text = em["text"]["textString"]
             user_text = user_text.replace("{" + "}", " ")
             for key, value in variables.items():
