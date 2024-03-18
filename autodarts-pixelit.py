@@ -13,6 +13,7 @@ import logging
 import time
 import ast
 import re
+import copy
 
 sh = logging.StreamHandler()
 sh.setLevel(logging.INFO)
@@ -89,8 +90,7 @@ def control_pixelit(effect_list, ptext, variables = {}, wake_up = False):
         return
 
     for effect in effect_list:
-        em = effect["template"].copy()
-        # ppi("HALLLLO???? " + em["template"]["text"]["textString"])
+        em = copy.deepcopy(effect["template"])
 
         if "brightness" not in em:
             em["brightness"] = EFFECT_BRIGHTNESS

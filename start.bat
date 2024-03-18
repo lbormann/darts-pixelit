@@ -7,7 +7,7 @@ python "autodarts-pixelit.py" ^
 -HFO "51" ^
 -HF "board|t:Highfinish!{}{playername}{}-{}{score}" ^
 -AS "call|t:Lets{}Play{}Darts{}-==-<" ^
--IDE "board|t:throw" ^
+-IDE "dart" ^
 -GS "board|t:{game-mode}:{}{game-mode-extra}" ^
 -MS "board|t:{game-mode}:{}{game-mode-extra}" ^
 -G "board|t:Gameshot!{}{playername}{}-{}{score}" ^
