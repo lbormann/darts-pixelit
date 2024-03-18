@@ -253,7 +253,7 @@ _ _ _ _ _ _ _ _ _ _
 | --  | -- |
 | -HF | {playername}, {score} | 
 | -AS | | 
-| -IDE | |
+| -IDE | {playername}, {points-left} |
 | -MS | {game-mode}, {game-mode-extra}, {playername} | 
 | -GS | {game-mode}, {game-mode-extra}, {playername} | 
 | -G | {playername}, {score} | 

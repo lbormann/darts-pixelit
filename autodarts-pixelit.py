@@ -83,24 +83,27 @@ def control_pixelit(effect_list, ptext, variables = {}, wake_up = False):
     ppi(ptext + ' - PIXELIT!')
 
     if wake_up:
-        broadcast({"template": {"sleepMode": False}})
+        broadcast({"sleepMode": False})
 
     if effect_list is None:
         return
 
     for effect in effect_list:
-        em = effect.copy()
-        if "brightness" not in em["template"]:
-            em["template"]["brightness"] = EFFECT_BRIGHTNESS
+        em = effect["template"].copy()
+        # ppi("HALLLLO???? " + em["template"]["text"]["textString"])
 
-        user_text = em["template"]["text"]["textString"]
-        user_text = user_text.replace("{}", " ")
-        for key, value in variables.items():
-            user_text = user_text.replace("{" + key + "}", value)
-        em["template"]["text"]["textString"] = user_text
+        if "brightness" not in em:
+            em["brightness"] = EFFECT_BRIGHTNESS
+
+        if em["text"]["textString"] and em["text"]["textString"] != "":
+            user_text = em["text"]["textString"]
+            user_text = user_text.replace("{" + "}", " ")
+            for key, value in variables.items():
+                user_text = user_text.replace("{" + key + "}", value)
+            em["text"]["textString"] = user_text
         broadcast(em)
-        if em["delay"] != 0:
-            time.sleep(em["delay"] / 1000)
+        if effect["delay"] != 0:
+            time.sleep(effect["delay"] / 1000)
   
 def broadcast(data):
     global PIXELIT_ENDPOINTS
@@ -113,7 +116,7 @@ def broadcast(data):
 
 def broadcast_intern(endpoint, data):
     try: 
-        displayData = json.dumps(data["template"], ensure_ascii=False).encode('utf8')
+        displayData = json.dumps(data, ensure_ascii=False).encode('utf8')
         # ppi("PIXEL IT DATA: ", displayData)
         r = requests.post('http://' + endpoint + '/api/screen', displayData, headers={'Content-Type': 'application/data'})
         # ppi("display return: " + r.text)
@@ -219,7 +222,10 @@ def process_variant_x01(msg):
                 ppi('Darts-thrown: ' + val + ' - NOT configured!')
 
     elif msg['event'] == 'darts-pulled' and IDLE_EFFECTS is not None:
-        control_pixelit(IDLE_EFFECTS, 'Darts-pulled')
+        variables = {'playername': msg['player'], 
+                    'points-left': msg['game']['pointsLeft'], 
+                    }
+        control_pixelit(IDLE_EFFECTS, 'Darts-pulled', variables)
 
     elif msg['event'] == 'busted' and BUSTED_EFFECTS is not None:
         control_pixelit(BUSTED_EFFECTS, 'Busted!')
