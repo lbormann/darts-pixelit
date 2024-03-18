@@ -232,7 +232,7 @@ _ _ _ _ _ _ _ _ _ _
 
 * The first argument-definition shows the event 'App-start': on app start, a template-file with name 'call.json' will be displayed with a text 'Lets Play Darts -==-<'. Notice '{}' (curly braces) in the argument definition: It's placeholder for an empty space character in the given text (t:). This rule applies on every argument definition`s text. So.. you can't define an argument-text with 'call|t:Lets Play Darts -==-<'. That won't work properly.
 
-* The second argument-definition shows the event 'Gameshot': on gameshot, a template-file with name 'board.json' will be displayed. Moreover a text 'Gameshot! Spielername - Finish-score' will be displayed. Notice '{playername}' and {'score'}. Those are available variables for busted-event, which will be replaced on runtime with corresponding values. You can find a list of text-variables [here](#Text-variables).
+* The second argument-definition shows the event 'Gameshot': on gameshot, a template-file with name 'board.json' will be displayed. Moreover a text 'Gameshot! Playername - Finish-score' will be displayed. Notice '{playername}' and {'score'}. Those are valid text-variables for busted-event. Those variables will be replaced on runtime with corresponding values. You can find a list of available text-variables [here](#Text-variables).
 
 * The third argument-definition shows a 'score-area': recognized scores between 0 and 15 will result in displaying template 'points-bad' 
 
