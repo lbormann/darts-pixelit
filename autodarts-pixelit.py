@@ -299,7 +299,7 @@ def on_message_data_feeder(ws, message):
     def process(*args):
         try:
             # ppi(message)
-            msg = ast.literal_eval(message)
+            msg = json.loads(message)
 
             if('game' in msg and 'mode' in msg['game']):
                 mode = msg['game']['mode']
@@ -307,7 +307,7 @@ def on_message_data_feeder(ws, message):
                     process_variant_x01(msg)
                 # elif mode == 'Cricket':
                 #     process_match_cricket(msg)
-            elif(msg['event'] == 'lobby'):
+            elif('event' in msg and msg['event'] == 'lobby'):
                 process_lobby(msg)
 
         except Exception as e:

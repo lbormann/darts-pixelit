@@ -1,6 +1,8 @@
 ## 1.1.1
 
 - fix playername variable for score-event
+- fix GS, MS
+- fix ws bug
 
 
 ## 1.1.0
