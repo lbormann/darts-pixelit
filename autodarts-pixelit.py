@@ -26,7 +26,7 @@ logger.addHandler(sh)
 
 
 
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 
 DEFAULT_EFFECT_BRIGHTNESS = 20
 
@@ -193,19 +193,21 @@ def parse_score_area_effects_argument(score_area_effects_arguments):
     
 
 def process_lobby(msg):
-    if msg['action'] == 'player-joined' and PLAYER_JOINED_EFFECTS != None:
+    if msg['action'] == 'player-joined' and PLAYER_JOINED_EFFECTS is not None:
         variables = {'playername': msg['player']}
         control_pixelit(PLAYER_JOINED_EFFECTS, 'Player joined!', variables)    
     
-    elif msg['action'] == 'player-left' and PLAYER_LEFT_EFFECTS != None:
+    elif msg['action'] == 'player-left' and PLAYER_LEFT_EFFECTS is not None:
         variables = {'playername': msg['player']}
         control_pixelit(PLAYER_LEFT_EFFECTS, 'Player left!', variables)    
 
 def process_variant_x01(msg):
     if msg['event'] == 'darts-thrown':
         val = str(msg['game']['dartValue'])
-        variables = {'score': val}
-
+        variables = {
+            'playername': msg['player'],
+            'score': val
+            }
         if SCORE_EFFECTS[val] is not None:
             control_pixelit(SCORE_EFFECTS[val], 'Darts-thrown: ' + val, variables)
         else:
