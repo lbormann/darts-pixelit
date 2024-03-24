@@ -1,3 +1,8 @@
+## 1.1.2
+
+- fix G and M
+
+
 ## 1.1.1
 
 - fix playername variable for score-event

@@ -26,7 +26,7 @@ logger.addHandler(sh)
 
 
 
-VERSION = '1.1.1'
+VERSION = '1.1.2'
 
 DEFAULT_EFFECT_BRIGHTNESS = 20
 
@@ -238,7 +238,7 @@ def process_variant_x01(msg):
         if HIGH_FINISH_ON is not None and int(score) >= HIGH_FINISH_ON and HIGH_FINISH_EFFECTS is not None:
             control_pixelit(HIGH_FINISH_EFFECTS, 'Game-won - HIGHFINISH', variables)
         elif GAME_WON_EFFECTS is not None:
-            control_pixelit(GAME_WON_EFFECTS, 'Game-won', "GAME WON", variables)
+            control_pixelit(GAME_WON_EFFECTS, 'Game-won', variables)
 
     elif msg['event'] == 'match-won' and MATCH_WON_EFFECTS is not None:
         score = msg['game']['dartsThrownValue']
@@ -246,7 +246,7 @@ def process_variant_x01(msg):
         if HIGH_FINISH_ON is not None and int(score) >= HIGH_FINISH_ON and HIGH_FINISH_EFFECTS is not None:
             control_pixelit(HIGH_FINISH_EFFECTS, 'Match-won - HIGHFINISH', variables)
         elif MATCH_WON_EFFECTS is not None:
-            control_pixelit(MATCH_WON_EFFECTS, 'Match-won', "MATCH WON", variables)
+            control_pixelit(MATCH_WON_EFFECTS, 'Match-won', variables)
 
     elif msg['event'] == 'match-started' and MATCH_START_EFFECTS is not None:
         variables = {'playername': msg['player'], 
