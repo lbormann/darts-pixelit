@@ -3,19 +3,19 @@ python "autodarts-pixelit.py" ^
 -CON "127.0.0.1:8079" ^
 -PEPS "your-first-pixelit-ip" "your-secondary-pixelit-ip" ^
 -TP "absolute-path-to-your-template-files" ^
--BRI "255" ^
--HFO "51" ^
--HF "board|t:Highfinish!{}{playername}{}-{}{score}" ^
--AS "call|t:Lets{}Play{}Darts{}-==-<" ^
--IDE "dart" ^
--GS "board|t:{game-mode}:{}{game-mode-extra}" ^
+-BRI "50" ^
+-HFO "100" ^
+-HF "call|t:Highfinish!{}{playername}{}-{}{score}" ^
+-AS "call|t:Let's{}Play{}Darts{}-==-<" ^
+-IDE "dart|d:1500" "board|t:{playername}{}-{points-left}-<" ^
+-GS "board|t:Game{}on{playername}" ^
 -MS "board|t:{game-mode}:{}{game-mode-extra}" ^
--G "board|t:Gameshot!{}{playername}{}-{}{score}" ^
--M "board|t:Matchshot!{}{playername}{}-{}{score}" ^
--B "dart|d:200|b:10" "dart0|d:200|b:20" "dart1|d:200|b:30" "dart2|d:200|b:40" "dart3|d:200|b:50" "dart4|d:200|b:60" "dart5|d:200|b:70" "dart6|d:200|b:80" "dart7|d:200|b:90" "dart8|d:200|b:100" "dart9|d:200|b:110" "dart10|d:200|b:120" "dart11|d:200|b:130" "dart12|b:140" ^
--PJ "board|b:255|t:{playername}{}joined" ^
+-G "call|t:Leg{}Winner{}{playername}" ^
+-M "dart0|d:200" "dart1|d:200" "dart2|d:200" "dart3|d:200" "dart4|d:200" "dart5|d:200" "dart6|d:200" "dart7|d:200" "fire|t:Match{}Winner{}{playername}" ^
+-B "dart0|d:200|b:20" "dart1|d:200|b:30" "dart2|d:200|b:40" "dart3|d:200|b:50" "dart4|d:200|b:60" "dart5|d:200|b:70" "dart6|d:200|b:80" "dart7|d:200|b:90" "dart8|d:200|b:100" "dart9|d:200|b:110" "dart10|d:200|b:120" "dart11|d:200|b:130" "dart12|d:200|b:140" "alarm|t:Busted{}{playername}" ^
+-PJ "board|t:{playername}{}joined" ^
 -PL "board|t:{playername}{}left" ^
--S3 "points|t:3" ^
--S60 "points|t:60" ^
--A1 "0-180" "points|t:{score}" ^
+-S0 "alarm|t:No{}Score{}{playername}"
+-S180 "fire|t:{score}{}{playername}"
+-A1 "0-179" "points|t:{score}" ^
 -DEB "1"
