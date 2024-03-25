@@ -15,7 +15,7 @@ python "autodarts-pixelit.py" ^
 -B "dart0|d:200|b:20" "dart1|d:200|b:30" "dart2|d:200|b:40" "dart3|d:200|b:50" "dart4|d:200|b:60" "dart5|d:200|b:70" "dart6|d:200|b:80" "dart7|d:200|b:90" "dart8|d:200|b:100" "dart9|d:200|b:110" "dart10|d:200|b:120" "dart11|d:200|b:130" "dart12|d:200|b:140" "alarm|t:Busted{}{playername}" ^
 -PJ "board|t:{playername}{}joined" ^
 -PL "board|t:{playername}{}left" ^
--S0 "alarm|t:No{}Score{}{playername}"
--S180 "fire|t:{score}{}{playername}"
+-S0 "alarm|t:No{}Score{}{playername}" ^
+-S180 "fire|t:{score}{}{playername}" ^
 -A1 "0-179" "points|t:{score}" ^
 -DEB "1"
