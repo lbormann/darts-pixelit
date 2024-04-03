@@ -4,16 +4,13 @@ import json
 import platform
 import argparse
 from pathlib import Path
-from urllib.parse import urlparse
-import requests
-import websocket
-import ssl
 import threading
 import logging
 import time
-import ast
 import re
 import copy
+import requests
+import socketio
 
 sh = logging.StreamHandler()
 sh.setLevel(logging.INFO)
@@ -26,7 +23,13 @@ logger.addHandler(sh)
 
 
 
-VERSION = '1.1.2'
+
+http_session = requests.Session()
+http_session.verify = False
+sio = socketio.Client(http_session=http_session, logger=True, engineio_logger=True)
+
+
+VERSION = '1.1.3'
 
 DEFAULT_EFFECT_BRIGHTNESS = 20
 
@@ -263,71 +266,55 @@ def process_variant_x01(msg):
         control_pixelit(GAME_START_EFFECTS, 'Game-started', variables)
     
 
-def build_data_feeder_url():
-    server_host = CON.replace('ws://', '').replace('wss://', '').replace('http://', '').replace('https://', '')
-    server_url = 'wss://' + server_host
+
+
+    
+    
+
+@sio.event
+def connect():
+    ppi('CONNECTED TO DATA-FEEDER ' + sio.connection_url)
+
+@sio.event
+def connect_error(data):
+    if DEBUG:
+        ppe("CONNECTION TO DATA-FEEDER FAILED! " + sio.connection_url, data)
+
+@sio.event
+def message(msg):
     try:
-        ws = websocket.create_connection(server_url, sslopt={"cert_reqs": ssl.CERT_NONE})
-        ws.close()
-    except Exception as e_ws:
-        try:
-            server_url = 'ws://' + server_host
-            ws = websocket.create_connection(server_url)
-            ws.close()
-        except:
-            pass
-    return server_url
+        # ppi(message)
+        if('game' in msg and 'mode' in msg['game']):
+            mode = msg['game']['mode']
+            if mode == 'X01' or mode == 'Cricket' or mode == 'Random Checkout':
+                process_variant_x01(msg)
+            # elif mode == 'Cricket':
+            #     process_match_cricket(msg)
+        elif('event' in msg and msg['event'] == 'lobby'):
+            process_lobby(msg)
+
+    except Exception as e:
+        ppe('DATA-FEEDER Message failed: ', e)
+
+@sio.event
+def disconnect():
+    ppi('DISCONNECTED FROM DATA-FEEDER ' + sio.connection_url)
+
+
 
 def connect_data_feeder():
-    def process(*args):
-        global WS_DATA_FEEDER
-        websocket.enableTrace(False)
-
-        WS_DATA_FEEDER = websocket.WebSocketApp(build_data_feeder_url(),
-                                on_open = on_open_data_feeder,
-                                on_message = on_message_data_feeder,
-                                on_error = on_error_data_feeder,
-                                on_close = on_close_data_feeder)
-        WS_DATA_FEEDER.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
-
-    threading.Thread(target=process).start()
-
-def on_open_data_feeder(ws):
-    ppi('CONNECTED TO DATA-FEEDER ' + str(ws.url))
-    
-def on_message_data_feeder(ws, message):
-    def process(*args):
-        try:
-            # ppi(message)
-            msg = json.loads(message)
-
-            if('game' in msg and 'mode' in msg['game']):
-                mode = msg['game']['mode']
-                if mode == 'X01' or mode == 'Cricket' or mode == 'Random Checkout':
-                    process_variant_x01(msg)
-                # elif mode == 'Cricket':
-                #     process_match_cricket(msg)
-            elif('event' in msg and msg['event'] == 'lobby'):
-                process_lobby(msg)
-
-        except Exception as e:
-            ppe('WS-Message failed: ', e)
-
-    threading.Thread(target=process).start()
-
-def on_close_data_feeder(ws, close_status_code, close_msg):
     try:
-        ppi("Websocket [" + str(ws.url) + "] closed! " + str(close_msg) + " - " + str(close_status_code))
-        ppi("Retry : %s" % time.ctime())
-        time.sleep(3)
-        connect_data_feeder()
-    except Exception as e:
-        ppe('WS-Close failed: ', e)
-    
-def on_error_data_feeder(ws, error):
-    ppe('WS-Error ' + str(ws.url) + ' failed: ', error)
-
-    
+        server_host = CON.replace('ws://', '').replace('wss://', '').replace('http://', '').replace('https://', '')
+        server_url = 'ws://' + server_host
+        sio.connect(server_url, transports=['websocket'])
+        sio.wait()
+    except Exception:
+        try:
+            server_url = 'wss://' + server_host
+            sio.connect(server_url, transports=['websocket'], retry=True, wait_timeout=3)
+            sio.wait()
+        except Exception:
+            pass
 
 
 
@@ -360,9 +347,6 @@ if __name__ == "__main__":
     args = vars(ap.parse_args())
 
    
-    global WS_DATA_FEEDER
-    WS_DATA_FEEDER = None
-
 
 
     # ppi('Started with following arguments:')
@@ -425,4 +409,4 @@ if __name__ == "__main__":
     control_pixelit(APP_START_EFFECTS, "App-started", wake_up=True)
 
 
-time.sleep(30)
+time.sleep(5)

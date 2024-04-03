@@ -25,8 +25,8 @@ Special thanks to user [Sini](https://discordapp.com/users/935394843625156688). 
 ## Showcase
 
 #### Videos (Click to play):
-<!-- [![IMAGE_ALT](https://img.youtube.com/vi/fDXomw55vhI/hqdefault.jpg)](https://youtu.be/fDXomw55vhI) -->
-COMING SOON
+[![IMAGE_ALT](https://img.youtube.com/vi/c0mtlFno-bI/hqdefault.jpg)](https://youtu.be/c0mtlFno-bI)
+
 
 #### Images:
 <!-- <img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/1.jpg?raw=true">
@@ -49,9 +49,6 @@ Here is my currrent Hardware-Setup (You can google prices yourself):
 * Controller: 1x AZDelivery ESP32 D1 Mini
 * LED-Matrix: 1x WS2812B RGB Flexible FCB Vollfarb-Pixelmatrix, 8x32 Pixels
 * Power adapter: 1x Mean Well LPV-60-5 40W 5V, 8AMP DC
-* Connector: COMING SOON
-* Connector: COMING SOON
-
 
 
 ## INSTALL INSTRUCTION

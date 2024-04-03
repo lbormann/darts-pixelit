@@ -1,3 +1,8 @@
+## 1.1.3
+
+- switch to socketio-client
+
+
 ## 1.1.2
 
 - fix G and M
