@@ -400,13 +400,16 @@ if __name__ == "__main__":
         SCORE_AREA_EFFECTS[a] = parsed_score_area
         # ppi(parsed_score_area)
 
+
+    control_pixelit(APP_START_EFFECTS, "App-started", wake_up=True)
+
     try:
         connect_data_feeder()
     except Exception as e:
         ppe("Connect failed: ", e)
 
 
-    control_pixelit(APP_START_EFFECTS, "App-started", wake_up=True)
+    
 
 
 time.sleep(5)
