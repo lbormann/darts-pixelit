@@ -1,0 +1,1 @@
+-add stop-key for templates

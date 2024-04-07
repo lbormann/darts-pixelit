@@ -5,12 +5,12 @@ python "autodarts-pixelit.py" ^
 -TP "absolute-path-to-your-template-files" ^
 -BRI "50" ^
 -HFO "100" ^
--HF "call|t:Highfinish!{}{playername}{}-{}{score}" ^
--AS "call|t:Let's{}Play{}Darts{}-==-<" ^
+-HF "autodarts|t:Highfinish!{}{playername}{}-{}{score}" ^
+-AS "autodarts|t:Let's{}Play{}Darts{}-==-<" ^
 -IDE "dart|d:1500" "board|t:{playername}{}-{points-left}-<" ^
 -GS "board|t:Game{}on{playername}" ^
 -MS "board|t:{game-mode}:{}{game-mode-extra}" ^
--G "call|t:Leg{}Winner{}{playername}" ^
+-G "autodarts|t:Leg{}Winner{}{playername}" ^
 -M "dart0|d:200" "dart1|d:200" "dart2|d:200" "dart3|d:200" "dart4|d:200" "dart5|d:200" "dart6|d:200" "dart7|d:200" "fire|t:Match{}Winner{}{playername}" ^
 -B "dart0|d:200|b:20" "dart1|d:200|b:30" "dart2|d:200|b:40" "dart3|d:200|b:50" "dart4|d:200|b:60" "dart5|d:200|b:70" "dart6|d:200|b:80" "dart7|d:200|b:90" "dart8|d:200|b:100" "dart9|d:200|b:110" "dart10|d:200|b:120" "dart11|d:200|b:130" "dart12|d:200|b:140" "alarm|t:Busted{}{playername}" ^
 -PJ "board|t:{playername}{}joined" ^
