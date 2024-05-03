@@ -29,7 +29,7 @@ http_session.verify = False
 sio = socketio.Client(http_session=http_session, logger=True, engineio_logger=True)
 
 
-VERSION = '1.1.3'
+VERSION = '1.2.0'
 
 DEFAULT_EFFECT_BRIGHTNESS = 20
 
@@ -357,7 +357,7 @@ if __name__ == "__main__":
     osRelease = platform.release()
     ppi('\r\n', None, '')
     ppi('##########################################', None, '')
-    ppi('       WELCOME TO AUTODARTS-PIXELIT', None, '')
+    ppi('       WELCOME TO DARTS-PIXELIT', None, '')
     ppi('##########################################', None, '')
     ppi('VERSION: ' + VERSION, None, '')
     ppi('RUNNING OS: ' + osType + ' | ' + osName + ' | ' + osRelease, None, '')

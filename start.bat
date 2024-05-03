@@ -1,5 +1,5 @@
 PUSHD .
-python "autodarts-pixelit.py" ^
+python "darts-pixelit.py" ^
 -CON "127.0.0.1:8079" ^
 -PEPS "your-first-pixelit-ip" "your-secondary-pixelit-ip" ^
 -TP "absolute-path-to-your-template-files" ^

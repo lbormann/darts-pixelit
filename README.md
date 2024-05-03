@@ -1,7 +1,7 @@
-# AUTODARTS-PIXELIT
-[![Downloads](https://img.shields.io/github/downloads/lbormann/autodarts-pixelit/total.svg)](https://github.com/lbormann/autodarts-pixelit/releases/latest)
+# DARTS-PIXELIT
+[![Downloads](https://img.shields.io/github/downloads/lbormann/darts-pixelit/total.svg)](https://github.com/lbormann/darts-pixelit/releases/latest)
 
-Autodarts-pixelit controls your pixelit-installation(s) https://github.com/pixelit-project/PixelIt accordingly to the state of an https://autodarts.io game. A running instance of https://github.com/lbormann/autodarts-caller is needed that sends thrown points from https://autodarts.io to this application.
+Darts-pixelit controls your pixelit-installation(s) https://github.com/pixelit-project/PixelIt accordingly to the state of an https://autodarts.io game. A running instance of https://github.com/lbormann/darts-caller is needed that sends thrown points from https://autodarts.io to this application.
 
 Special thanks to user [Sini](https://discordapp.com/users/935394843625156688). He came up with the funny idea and developed the core code for controlling a Pixelit installation.
 
@@ -29,17 +29,17 @@ Special thanks to user [Sini](https://discordapp.com/users/935394843625156688). 
 
 
 #### Images:
-<!-- <img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/1.jpg?raw=true">
+<!-- <img src="https://github.com/lbormann/darts-pixelit/blob/main/showcase/1.jpg?raw=true">
 <p float="left">
-<img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/2.jpg?raw=true" width="49%">
-<img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/3.jpg?raw=true" width="49%">
-<img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/4.jpg?raw=true" width="49%">
-<img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/5.jpg?raw=true" width="49%">
-<img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/6.jpg?raw=true" width="49%">
-<img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/7.jpg?raw=true" width="49%">
-<img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/8.jpg?raw=true" width="49%">
-<img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/9.jpg?raw=true" width="49%">
-<img src="https://github.com/lbormann/autodarts-pixelit/blob/main/showcase/10.jpg?raw=true" width="49%">
+<img src="https://github.com/lbormann/darts-pixelit/blob/main/showcase/2.jpg?raw=true" width="49%">
+<img src="https://github.com/lbormann/darts-pixelit/blob/main/showcase/3.jpg?raw=true" width="49%">
+<img src="https://github.com/lbormann/darts-pixelit/blob/main/showcase/4.jpg?raw=true" width="49%">
+<img src="https://github.com/lbormann/darts-pixelit/blob/main/showcase/5.jpg?raw=true" width="49%">
+<img src="https://github.com/lbormann/darts-pixelit/blob/main/showcase/6.jpg?raw=true" width="49%">
+<img src="https://github.com/lbormann/darts-pixelit/blob/main/showcase/7.jpg?raw=true" width="49%">
+<img src="https://github.com/lbormann/darts-pixelit/blob/main/showcase/8.jpg?raw=true" width="49%">
+<img src="https://github.com/lbormann/darts-pixelit/blob/main/showcase/9.jpg?raw=true" width="49%">
+<img src="https://github.com/lbormann/darts-pixelit/blob/main/showcase/10.jpg?raw=true" width="49%">
 </p> -->
 COMING SOON
 
@@ -55,7 +55,7 @@ Here is my currrent Hardware-Setup (You can google prices yourself):
 
 ### Desktop-OS: 
 
-- If you're running a desktop-driven OS it's recommended to use [autodarts-desktop](https://github.com/lbormann/autodarts-desktop) as it takes care of starting, updating, configurating and managing multiple apps.
+- If you're running a desktop-driven OS it's recommended to use [darts-hub](https://github.com/lbormann/darts-hub) as it takes care of starting, updating, configurating and managing multiple apps.
 
 
 ### Headless-OS:
@@ -73,7 +73,7 @@ Here is my currrent Hardware-Setup (You can google prices yourself):
 
 #### Get the project
 
-    git clone https://github.com/lbormann/autodarts-pixelit.git
+    git clone https://github.com/lbormann/darts-pixelit.git
 
 Go to download-directory and type:
 
@@ -85,7 +85,7 @@ Go to download-directory and type:
 
 ### Prerequisite
 
-* You need to have a running caller - https://github.com/lbormann/autodarts-caller - (latest version)
+* You need to have a running caller - https://github.com/lbormann/darts-caller - (latest version)
 * You need to have a running PIXELIT-Installation (2.5.0 at minimum required)
 
 ### Run by executable
@@ -94,7 +94,7 @@ Go to download-directory and type:
 
 Create a shortcut of the executable; right click on the shortcut -> select properties -> add arguments in the target input at the end of the text field.
 
-Example: C:\Downloads\autodarts-pixelit.exe -PEPS "your-first-pixelit-ip" "your-second-pixelit-ip" -TP "absolute-path-to-your-template-files"
+Example: C:\Downloads\darts-pixelit.exe -PEPS "your-first-pixelit-ip" "your-second-pixelit-ip" -TP "absolute-path-to-your-template-files"
 
 Save changes.
 Click on the shortcut to start the application.
@@ -104,7 +104,7 @@ Click on the shortcut to start the application.
 
 #### Example: Linux
 
-    python3 autodarts-pixelit.py -PEPS "your-pixelit-ip" -TP "absolute-path-to-your-template-files"
+    python3 darts-pixelit.py -PEPS "your-pixelit-ip" -TP "absolute-path-to-your-template-files"
 
 
 
@@ -132,7 +132,7 @@ Click on the shortcut to start the application.
 
 *`-CON / --connection`*
 
-Host address to data-feeder (autodarts-caller). By Default this is '127.0.0.1:8079' (means your local ip-address / usually you do NOT need to change this)
+Host address to data-feeder (darts-caller). By Default this is '127.0.0.1:8079' (means your local ip-address / usually you do NOT need to change this)
     
 *`-PEPS / --pixelit_endpoints`*
 
@@ -141,7 +141,7 @@ IP to your PIXELIT. You can define multiple entries. For example: '192.168.3.200
 *`-TP / --templates_path`*
 
 Setup an absolute path where your templates (*.json) are located.
-Make sure the given path doesn't reside inside main-directory (autodarts-pixelit).
+Make sure the given path doesn't reside inside main-directory (darts-pixelit).
 
 *`-BRI / --effect_brightness`*
 
@@ -274,4 +274,4 @@ Moreover you can find ready-to-go pixelit-templates in the community-folder.
 
 ## !!! IMPORTANT !!!
 
-This application requires a running instance of autodarts-caller https://github.com/lbormann/autodarts-caller
+This application requires a running instance of darts-caller https://github.com/lbormann/darts-caller

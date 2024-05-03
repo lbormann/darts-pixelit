@@ -1,3 +1,8 @@
+## 1.2.0
+
+- rename application to darts-pixelit
+
+
 ## 1.1.3
 
 - switch to socketio-client
