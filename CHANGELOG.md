@@ -1,3 +1,6 @@
+## 1.2.2
+- bugfix
+
 ## 1.2.1
 - add connection information for caller
 

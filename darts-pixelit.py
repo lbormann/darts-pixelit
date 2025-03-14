@@ -29,7 +29,7 @@ http_session.verify = False
 sio = socketio.Client(http_session=http_session, logger=True, engineio_logger=True)
 
 
-VERSION = '1.2.1'
+VERSION = '1.2.2'
 
 DEFAULT_EFFECT_BRIGHTNESS = 20
 
