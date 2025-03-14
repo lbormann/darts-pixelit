@@ -29,7 +29,7 @@ http_session.verify = False
 sio = socketio.Client(http_session=http_session, logger=True, engineio_logger=True)
 
 
-VERSION = '1.2.0'
+VERSION = '1.2.1'
 
 DEFAULT_EFFECT_BRIGHTNESS = 20
 
@@ -274,6 +274,11 @@ def process_variant_x01(msg):
 @sio.event
 def connect():
     ppi('CONNECTED TO DATA-FEEDER ' + sio.connection_url)
+    PIXEL_info ={
+        'status': 'Pixel connected',
+        'version': VERSION
+    }
+    sio.emit('message', PIXEL_info)
 
 @sio.event
 def connect_error(data):

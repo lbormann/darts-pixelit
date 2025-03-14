@@ -1,3 +1,6 @@
+## 1.2.1
+- add connection information for caller
+
 ## 1.2.0
 
 - rename application to darts-pixelit
