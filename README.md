@@ -130,86 +130,86 @@ Click on the shortcut to start the application.
 
 
 
-*`-CON / --connection`*
+#### *`-CON / --connection`*
 
-Host address to data-feeder (darts-caller). By Default this is '127.0.0.1:8079' (means your local ip-address / usually you do NOT need to change this)
+<p>Host address to data-feeder (darts-caller). By Default this is '127.0.0.1:8079' (means your local ip-address / usually you do NOT need to change this)</p>
     
-*`-PEPS / --pixelit_endpoints`*
+#### *`-PEPS / --pixelit_endpoints`*
 
-IP to your PIXELIT. You can define multiple entries. For example: '192.168.3.200' '192.168.3.201'.
+<p>IP to your PIXELIT. You can define multiple entries. For example: '192.168.3.200' '192.168.3.201'.</p>
 
-*`-TP / --templates_path`*
+#### *`-TP / --templates_path`*
 
-Setup an absolute path where your templates (*.json) are located.
-Make sure the given path doesn't reside inside main-directory (darts-pixelit).
+<p>Setup an absolute path where your templates (*.json) are located.
+Make sure the given path doesn't reside inside main-directory (darts-pixelit).</p>
 
-*`-BRI / --effect_brightness`*
+#### *`-BRI / --effect_brightness`*
 
-Brightness for PIXELIT-effects. You can choose a value between '1' and '255'. By default this is 20.
+<p>Brightness for PIXELIT-effects. You can choose a value between '1' and '255'. By default this is 20.</p>
 
-*`-HFO / --high_finish_on`*
+#### *`-HFO / --high_finish_on`*
 
-Define what a highfinish means for you. Choose a score-value between '2' and '170'. This value is relevant for argument '-HF'. By default this is not set = no effects for 'Highfinishes'.
+<p>Define what a highfinish means for you. Choose a score-value between '2' and '170'. This value is relevant for argument '-HF'. By default this is not set = no effects for 'Highfinishes'.</p>
 
-*`-HF / --high_finish_effects`*
+#### *`-HF / --high_finish_effects`*
 
-Controls your pixelit(s) when a high-finish occurs.
-Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+<p>Controls your pixelit(s) when a high-finish occurs.
+Define one template or a list. If you define a list, the program will display templates one after another.</p> See examples below!
 
-*`-AS / --app_start_effects`*
+#### *`-AS / --app_start_effects`*
 
-Controls your pixelit(s) when the application starts
-Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+<p>Controls your pixelit(s) when the application starts
+Define one template or a list. If you define a list, the program will display templates one after another.</p> See examples below!
 
-*`-IDE / --idle_effects`*
+#### *`-IDE / --idle_effects`*
 
-Controls your pixelit(s) when dart-pulling occurs.
-Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+<p>Controls your pixelit(s) when dart-pulling occurs.
+Define one template or a list. If you define a list, the program will display templates one after another.</p> See examples below!
 
-*`-GS / --game_start_effects`*
+#### *`-GS / --game_start_effects`*
 
-Controls your pixelit(s) when a game-start occurs.
-Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+<p>Controls your pixelit(s) when a game-start occurs.
+Define one template or a list. If you define a list, the program will display templates one after another.</p> See examples below!
 
-*`-MS / --match_start_effects`*
+#### *`-MS / --match_start_effects`*
 
-Controls your pixelit(s) when a match-start occurs.
-Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+<p>Controls your pixelit(s) when a match-start occurs.
+Define one template or a list. If you define a list, the program will display templates one after another.</p> See examples below!
 
-*`-G / --game_won_effects`*
+#### *`-G / --game_won_effects`*
 
-Controls your pixelit(s) when a game won occurs.
-Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+<p>Controls your pixelit(s) when a game won occurs.
+Define one template or a list. If you define a list, the program will display templates one after another.</p> See examples below!
 
-*`-M / --match_won_effects`*
+#### *`-M / --match_won_effects`*
 
-Controls your pixelit(s) when a match won occurs.
-Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+<p>Controls your pixelit(s) when a match won occurs.
+Define one template or a list. If you define a list, the program will display templates one after another.</p> See examples below!
 
-*`-B / --busted_effects`*
+#### *`-B / --busted_effects`*
 
-Controls your pixelit(s) when a bust occurs.
-Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+<p>Controls your pixelit(s) when a bust occurs.
+Define one template or a list. If you define a list, the program will display templates one after another.</p> See examples below!
 
-*`-PJ / --player_joined_effects`*
+#### *`-PJ / --player_joined_effects`*
 
-Controls your pixelit(s) when a player-join occurs.
-Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+<p>Controls your pixelit(s) when a player-join occurs.
+Define one template or a list. If you define a list, the program will display templates one after another.</p> See examples below!
 
-*`-PL / --player_left_effects`*
+#### *`-PL / --player_left_effects`*
 
-Controls your pixelit(s) when a player-left occurs.
-Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+<p>Controls your pixelit(s) when a player-left occurs.
+Define one template or a list. If you define a list, the program will display templates one after another.</p> See examples below!
 
-*`-S{0-180} / --score_{0-180}_effects`*
+#### *`-S{0-180} / --score_{0-180}_effects`*
 
-Controls your pixelit(s) when a specific score occurs. You can define every score-value between 0 and 180.
-Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+<p>Controls your pixelit(s) when a specific score occurs. You can define every score-value between 0 and 180.
+Define one template or a list. If you define a list, the program will display templates one after another.</p> See examples below!
 
-*`-A{1-12} / --score_area_{1-12}_effects`*
+#### *`-A{1-12} / --score_area_{1-12}_effects`*
 
-Besides the definition of single score-values you can define up to 12 score-areas.
-Define one template or a list. If you define a list, the program will display templates one after another. See examples below!
+<p>Besides the definition of single score-values you can define up to 12 score-areas.
+Define one template or a list. If you define a list, the program will display templates one after another.</p> See examples below!
 
 
 _ _ _ _ _ _ _ _ _ _
