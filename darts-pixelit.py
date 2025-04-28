@@ -29,7 +29,7 @@ http_session.verify = False
 sio = socketio.Client(http_session=http_session, logger=True, engineio_logger=True)
 
 
-VERSION = '1.2.2'
+VERSION = '1.2.3'
 
 DEFAULT_EFFECT_BRIGHTNESS = 20
 
@@ -37,6 +37,7 @@ EFFECT_PARAMETER_SEPARATOR = "|"
 BOGEY_NUMBERS = [169, 168, 166, 165, 163, 162, 159]
 SUPPORTED_CRICKET_FIELDS = [15, 16, 17, 18, 19, 20, 25]
 SUPPORTED_GAME_VARIANTS = ['X01', 'Cricket', 'Random Checkout']
+PIXEL_SETTINGS_ARG = {}
 
 
 
@@ -112,7 +113,7 @@ def broadcast(data):
     global PIXELIT_ENDPOINTS
     for pixelit_ep in PIXELIT_ENDPOINTS:
         try:
-            # ppi("Broadcasting to " + str(pixelit_ep))
+            ppi("Broadcasting to " + str(pixelit_ep))
             threading.Thread(target=broadcast_intern, args=(pixelit_ep, data)).start()
         except:  
             continue
@@ -120,9 +121,9 @@ def broadcast(data):
 def broadcast_intern(endpoint, data):
     try: 
         displayData = json.dumps(data, ensure_ascii=False).encode('utf8')
-        # ppi("PIXEL IT DATA: ", displayData)
+        ppi("PIXEL IT DATA: ", displayData)
         r = requests.post('http://' + endpoint + '/api/screen', displayData, headers={'Content-Type': 'application/data'})
-        # ppi("display return: " + r.text)
+        ppi("display return: " + r.text)
     except Exception as e:
         ppe("Error while sending to display.", e)
         return
@@ -276,7 +277,8 @@ def connect():
     ppi('CONNECTED TO DATA-FEEDER ' + sio.connection_url)
     PIXEL_info ={
         'status': 'Pixel connected',
-        'version': VERSION
+        'version': VERSION,
+        'settings': PIXEL_SETTINGS_ARG
     }
     sio.emit('message', PIXEL_info)
 
@@ -350,8 +352,29 @@ if __name__ == "__main__":
     ap.add_argument("-DEB", "--debug", type=int, choices=range(0, 2), default=False, required=False, help="If '1', the application will output additional information")
 
     args = vars(ap.parse_args())
-
-   
+    PIXEL_SETTINGS_ARG = {
+        'connection': args['connection'],
+        'pixelit_endpoints': args['pixelit_endpoints'],
+        'templates_path': args['templates_path'],
+        'effect_brightness': args['effect_brightness'],
+        'high_finish_on': args['high_finish_on'],
+        'high_finish_effects': args['high_finish_effects'],
+        'app_start_effects': args['app_start_effects'],
+        'idle_effects': args['idle_effects'],
+        'game_start_effects': args['game_start_effects'],
+        'match_start_effects': args['match_start_effects'],
+        'game_won_effects': args['game_won_effects'],
+        'match_won_effects': args['match_won_effects'],
+        'busted_effects': args['busted_effects'],
+        'player_joined_effects': args['player_joined_effects'],
+        'player_left_effects': args['player_left_effects'], 
+    }
+    for vS in range(0, 181):
+        valS = str(vS)
+        PIXEL_SETTINGS_ARG["score_" + valS + "_effects"] = args["score_" + valS + "_effects"]
+    for aS in range(1, 13):
+        areaS = str(aS)
+        PIXEL_SETTINGS_ARG["score_area_" + areaS + "_effects"] = args["score_area_" + areaS + "_effects"]
 
 
     # ppi('Started with following arguments:')

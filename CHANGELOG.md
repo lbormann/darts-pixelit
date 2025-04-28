@@ -1,3 +1,6 @@
+## 1.2.3
+- some backend changes
+
 ## 1.2.2
 - bugfix
 

@@ -44,7 +44,7 @@ jobs:
             OUT_FILE_NAME: darts-pixelit-mac
             ASSET_MIME: application/zip
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             TARGET: ubuntu
             CMD_BUILD: pyinstaller -F -n darts-pixelit -i resources/darts-pixelit.svg darts-pixelit.py
             OUT_FILE_NAME: darts-pixelit
@@ -56,7 +56,7 @@ jobs:
             OUT_FILE_NAME: darts-pixelit.exe
             ASSET_MIME: application/vnd.microsoft.portable-executable
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             TARGET: linux-arm64
             CMD_BUILD: |
               sudo apt-get update
