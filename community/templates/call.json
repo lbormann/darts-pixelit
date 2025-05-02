@@ -1,0 +1,15 @@
+{
+    "repeat": 3,
+    "lifetime": 10,
+
+   "text":{
+    "textString":"call",
+    "scrollText":"auto",
+    "scrollTextDelay": 50,
+        "color":{
+            "r":83,
+            "g":195,
+            "b":170
+        }
+    }
+}

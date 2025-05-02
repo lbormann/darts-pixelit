@@ -1,0 +1,29 @@
+{
+  "switchAnimation": {
+    "aktiv": true,
+    "animation": "fade"
+  },
+  "bitmap":{ 
+        "data":[0,0,0,0,0,0,48895,0,0,0,0,2612,2612,2612,0,0,0,0,6415,0,0,0,6415,0,0,2612,0,0,691,0,0,2612,48895,2612,0,691,0,691,0,2612,0,2612,0,0,691,0,0,2612,0,0,6415,0,0,0,6415,0,0,0,0,2612,2612,2612,0,48895],
+    "position": {
+      "x": 1,
+      "y": 0
+    },
+    "size": {
+      "width": 8,
+      "height": 8
+    }
+  }, 
+  "text":{ 
+      "textString":"Autodarts",
+      "bigFont": false,
+      "scrollText":"auto",
+      "scrollTextDelay": 100,
+      "centerText": true,
+      "position": {
+      "x": 10,
+      "y": 1
+      },
+    "hexColor": "#BBDEFB"
+  }   
+}

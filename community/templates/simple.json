@@ -1,0 +1,15 @@
+{
+    "repeat": 3,
+    "lifetime": 10,
+
+   "text":{
+    "textString":" points",
+    "scrollText":"auto",
+    "scrollTextDelay": 50,
+        "color":{
+            "r":160,
+            "g":160,
+            "b":160
+        }
+    }
+}
