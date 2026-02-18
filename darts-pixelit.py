@@ -29,7 +29,7 @@ http_session.verify = False
 sio = socketio.Client(http_session=http_session, logger=True, engineio_logger=True)
 
 
-VERSION = '1.2.3'
+VERSION = '1.3.0'
 
 DEFAULT_EFFECT_BRIGHTNESS = 20
 
@@ -105,18 +105,32 @@ def control_pixelit(effect_list, ptext, variables = {}, wake_up = False):
             for key, value in variables.items():
                 user_text = user_text.replace("{" + key + "}", value)
             em["text"]["textString"] = user_text
-        broadcast(em)
+        broadcast(em, effect.get("endpoints"))
         if effect["delay"] != 0:
             time.sleep(effect["delay"] / 1000)
   
-def broadcast(data):
+def broadcast(data, endpoint_indices=None):
     global PIXELIT_ENDPOINTS
-    for pixelit_ep in PIXELIT_ENDPOINTS:
-        try:
-            ppi("Broadcasting to " + str(pixelit_ep))
-            threading.Thread(target=broadcast_intern, args=(pixelit_ep, data)).start()
-        except:  
-            continue
+    if endpoint_indices is not None:
+        # Send to specific endpoint(s) only
+        for endpoint_index in endpoint_indices:
+            if endpoint_index < len(PIXELIT_ENDPOINTS):
+                pixelit_ep = PIXELIT_ENDPOINTS[endpoint_index]
+                try:
+                    ppi("Sending to endpoint " + str(endpoint_index) + ": " + str(pixelit_ep))
+                    threading.Thread(target=broadcast_intern, args=(pixelit_ep, data)).start()
+                except:
+                    pass
+            else:
+                ppi("Endpoint index " + str(endpoint_index) + " out of range (max: " + str(len(PIXELIT_ENDPOINTS) - 1) + ")")
+    else:
+        # Send to all endpoints
+        for pixelit_ep in PIXELIT_ENDPOINTS:
+            try:
+                ppi("Broadcasting to " + str(pixelit_ep))
+                threading.Thread(target=broadcast_intern, args=(pixelit_ep, data)).start()
+            except:  
+                continue
 
 def broadcast_intern(endpoint, data):
     try: 
@@ -145,18 +159,19 @@ def parse_effects_argument(effects_argument):
         try:
             
             effect_params = effect.split(EFFECT_PARAMETER_SEPARATOR)
-            state = {"template": None, "delay": 0}
+            state = {"template": None, "delay": 0, "endpoints": None}
 
             # template-name
             effect_template_name = effect_params[0].strip().lower()
             state["template"] = load_template(effect_template_name)
 
-            pattern = r'(?:t:(?P<t>[^\|]+))|(?:d:(?P<d>\d+))|(?:b:(?P<b>\d+))'
+            pattern = r'(?:t:(?P<t>[^\|]+))|(?:d:(?P<d>\d+))|(?:b:(?P<b>\d+))|(?:e:(?P<e>[\d,]+))'
             matches = re.finditer(pattern, effect)
 
             t_value = None
             d_value = None
             b_value = None
+            e_value = None
 
             for match in matches:
                 group_dict = match.groupdict()
@@ -166,6 +181,9 @@ def parse_effects_argument(effects_argument):
                     d_value = int(group_dict['d'])
                 elif group_dict['b']:
                     b_value = int(group_dict['b'])
+                elif group_dict['e']:
+                    # Parse comma-separated endpoint indices
+                    e_value = [int(idx.strip()) for idx in group_dict['e'].split(',') if idx.strip().isdigit()]
 
             if t_value is not None:
                 state["template"]["text"]["textString"] = t_value
@@ -176,6 +194,9 @@ def parse_effects_argument(effects_argument):
             if b_value is not None:
                 state["template"]["brightness"] = b_value
                 # ppi("b:", b_value)
+            if e_value is not None:
+                state["endpoints"] = e_value
+                # ppi("e:", e_value)
                     
             parsed_list.append(state)
         except Exception as e:

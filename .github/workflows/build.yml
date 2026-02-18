@@ -4,6 +4,7 @@ on:
   push:
     tags:
     - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+    - 'b*' # Push events to matching b*, i.e. b1.0, b20.15.10 (beta releases)
     # branches:
     #   - master
 
@@ -13,6 +14,46 @@ jobs:
     name: Create Release
     runs-on: [ubuntu-latest]
     steps:
+    - uses: actions/checkout@v4
+    
+    - name: Get version from tag
+      id: get_version
+      run: |
+        TAG_NAME=${GITHUB_REF#refs/tags/}
+        echo "TAG_NAME=$TAG_NAME" >> $GITHUB_OUTPUT
+        # Remove 'v' or 'b' prefix to get version number
+        VERSION=${TAG_NAME#v}
+        VERSION=${VERSION#b}
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        # Check if this is a beta release
+        if [[ "$TAG_NAME" == b* ]]; then
+          echo "IS_PRERELEASE=true" >> $GITHUB_OUTPUT
+          echo "RELEASE_NAME=Beta Release $TAG_NAME" >> $GITHUB_OUTPUT
+        else
+          echo "IS_PRERELEASE=false" >> $GITHUB_OUTPUT
+          echo "RELEASE_NAME=Release $TAG_NAME" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Extract changelog for version
+      id: changelog
+      run: |
+        # Extract changelog section for this version
+        # Matches from "## VERSION" until the next "## " or end of file
+        VERSION="${{ steps.get_version.outputs.VERSION }}"
+        CHANGELOG=$(awk -v ver="$VERSION" '
+          /^## / {
+            if (found) exit
+            if ($2 == ver) found=1
+            next
+          }
+          found { print }
+        ' CHANGELOG.md)
+        
+        # Handle multiline output
+        echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+        echo "$CHANGELOG" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+    
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -20,9 +61,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        release_name: ${{ steps.get_version.outputs.RELEASE_NAME }}
+        body: ${{ steps.changelog.outputs.CHANGELOG }}
         draft: false
-        prerelease: false
+        prerelease: ${{ steps.get_version.outputs.IS_PRERELEASE }}
     - name: Output Release URL File
       run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
     - name: Save Release URL File for publish

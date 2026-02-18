@@ -225,6 +225,7 @@ _ _ _ _ _ _ _ _ _ _
 |-A1 | 0-15 | points-bad | | | | |
 |-A2 | 16-60 | points-ok | | | | |
 |-B |  | dart\\|d:200\\|b:10 | dart0\\|d:200\\|b:20 | dart1\\|d:200\\|b:30 | dart2\\|b:50 | |
+|-S180 |  | fire\\|e:0 | points\\|t:180\\|e:1,2 | | | |
 
 
 * The first argument-definition shows the event 'App-start': on app start, a template-file with name 'call.json' will be displayed with a text 'Lets Play Darts -==-<'. Notice '{}' (curly braces) in the argument definition: It's a placeholder for an empty space character in the given text (t:). This rule applies on every text of an argument-definition. So.. you can't define an argument-text with 'call|t:Lets Play Darts -==-<'. That won't work properly.
@@ -236,6 +237,8 @@ _ _ _ _ _ _ _ _ _ _
 * The fourth argument-definition shows a 'score-area': recognized scores between 16 and 60 result in displaying template 'points-ok'
 
 * The fifth argument-definition shows the event 'Busted': Busting will result in displaying templates in order you define them (dart, dart0, dart1, ...). The value 'd:200' defines 200ms delay between current and next template. The value 'b:10' defines custom brightness for a template.
+
+* The sixth argument-definition shows 'Endpoint-Targeting': On a score of 180, the 'fire' template is sent only to endpoint 0 (first device), and the 'points' template with text '180' is sent to endpoints 1 and 2 (second and third device). See details below in [Endpoint-Targeting](#Endpoint-Targeting).
 
 * If you don't understand have a look at the example file!
 
@@ -260,6 +263,48 @@ _ _ _ _ _ _ _ _ _ _
 | -PL | {playername} | 
 | -S(1-180) | {playername}, {score} | 
 | -A(1-12) | {playername}, {score} | 
+
+
+### Endpoint-Targeting
+
+If you have multiple PixelIt devices connected via `-PEPS`, you can control which device(s) should display a specific effect using the `e:` parameter.
+
+#### Syntax
+
+| Parameter | Description | Example |
+| -- | -- | -- |
+| `e:INDEX` | Send effect to a single device | `e:0` |
+| `e:INDEX,INDEX,...` | Send effect to multiple devices | `e:0,2` |
+| (not set) | Send effect to ALL devices (default) | |
+
+The index is 0-based and corresponds to the order of endpoints defined in `-PEPS`.
+
+#### Examples
+
+Assuming you have 3 PixelIt devices configured:
+```
+-PEPS "192.168.1.100" "192.168.1.101" "192.168.1.102"
+```
+
+| Effect Definition | Target Device(s) |
+| -- | -- |
+| `fire` | All devices (192.168.1.100, .101, .102) |
+| `fire\|e:0` | Only first device (192.168.1.100) |
+| `fire\|e:1` | Only second device (192.168.1.101) |
+| `fire\|e:0,2` | First and third device (192.168.1.100, .102) |
+| `points\|t:180\|e:1,2\|d:500` | Second and third device with text and delay |
+
+#### Use Case
+
+This feature is useful when you want different displays for different purposes, for example:
+- Device 0: Show score animations
+- Device 1: Show player information
+- Device 2: Show countdown/game status
+
+```
+-S180 "fire|e:0" "points|t:180|e:1,2"
+```
+On a score of 180, device 0 shows the 'fire' animation while devices 1 and 2 display the score text.
 
 
 ## Community-Profiles

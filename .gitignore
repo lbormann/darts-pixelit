@@ -5,3 +5,4 @@ dist
 __pycache__
 NOTIZEN*.json
 darts-pixelit-raw.py
+DARTS-HUB-ENDPOINT-CONFIG.md

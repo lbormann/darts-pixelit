@@ -1,3 +1,6 @@
+## 1.3.0
+- add support for multiple PixelIt endpoints with `e:` parameter 
+
 ## 1.2.3
 - some backend changes
 
