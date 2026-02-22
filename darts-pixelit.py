@@ -29,9 +29,9 @@ http_session.verify = False
 sio = socketio.Client(http_session=http_session, logger=True, engineio_logger=True)
 
 
-VERSION = '1.3.0'
+VERSION = '1.3.1'
 
-DEFAULT_EFFECT_BRIGHTNESS = 20
+DEFAULT_EFFECT_BRIGHTNESS = 255
 
 EFFECT_PARAMETER_SEPARATOR = "|"
 BOGEY_NUMBERS = [169, 168, 166, 165, 163, 162, 159]
@@ -84,11 +84,11 @@ def check_paths(main_directory, templates_path):
     return errors
 
 
-def control_pixelit(effect_list, ptext, variables = {}, wake_up = False):    
+def control_pixelit(effect_list, ptext, variables = {}, wake_up = False, effect_arg = None):    
     ppi(ptext + ' - PIXELIT!')
 
     if wake_up:
-        broadcast({"sleepMode": False})
+        broadcast({"sleepMode": False}, trigger=ptext, effect_arg=effect_arg)
 
     if effect_list is None:
         return
@@ -105,19 +105,21 @@ def control_pixelit(effect_list, ptext, variables = {}, wake_up = False):
             for key, value in variables.items():
                 user_text = user_text.replace("{" + key + "}", value)
             em["text"]["textString"] = user_text
-        broadcast(em, effect.get("endpoints"))
+        broadcast(em, effect.get("endpoints"), trigger=ptext, effect_arg=effect_arg)
         if effect["delay"] != 0:
             time.sleep(effect["delay"] / 1000)
   
-def broadcast(data, endpoint_indices=None):
+def broadcast(data, endpoint_indices=None, trigger=None, effect_arg=None):
     global PIXELIT_ENDPOINTS
+    trigger_info = " [Trigger: " + trigger + "]" if trigger else ""
+    arg_info = " [Arg: " + effect_arg + "]" if effect_arg else ""
     if endpoint_indices is not None:
         # Send to specific endpoint(s) only
         for endpoint_index in endpoint_indices:
             if endpoint_index < len(PIXELIT_ENDPOINTS):
                 pixelit_ep = PIXELIT_ENDPOINTS[endpoint_index]
                 try:
-                    ppi("Sending to endpoint " + str(endpoint_index) + ": " + str(pixelit_ep))
+                    ppi("Sending to endpoint " + str(endpoint_index) + ": " + str(pixelit_ep) + trigger_info + arg_info)
                     threading.Thread(target=broadcast_intern, args=(pixelit_ep, data)).start()
                 except:
                     pass
@@ -127,7 +129,7 @@ def broadcast(data, endpoint_indices=None):
         # Send to all endpoints
         for pixelit_ep in PIXELIT_ENDPOINTS:
             try:
-                ppi("Broadcasting to " + str(pixelit_ep))
+                ppi("Broadcasting to " + str(pixelit_ep) + trigger_info + arg_info)
                 threading.Thread(target=broadcast_intern, args=(pixelit_ep, data)).start()
             except:  
                 continue
@@ -220,21 +222,33 @@ def parse_score_area_effects_argument(score_area_effects_arguments):
 def process_lobby(msg):
     if msg['action'] == 'player-joined' and PLAYER_JOINED_EFFECTS is not None:
         variables = {'playername': msg['player']}
-        control_pixelit(PLAYER_JOINED_EFFECTS, 'Player joined!', variables)    
+        control_pixelit(PLAYER_JOINED_EFFECTS, 'Player joined!', variables, effect_arg='-PJ')    
     
     elif msg['action'] == 'player-left' and PLAYER_LEFT_EFFECTS is not None:
         variables = {'playername': msg['player']}
-        control_pixelit(PLAYER_LEFT_EFFECTS, 'Player left!', variables)    
+        control_pixelit(PLAYER_LEFT_EFFECTS, 'Player left!', variables, effect_arg='-PL')    
 
 def process_variant_x01(msg):
+    # Extract remaining scores for all players
+    remaining = msg.get('remainingScores', {})
+    remaining_vars = {
+        'p1-points-left': str(remaining.get('player1', '0')),
+        'p2-points-left': str(remaining.get('player2', '0')),
+        'p3-points-left': str(remaining.get('player3', '0')),
+        'p4-points-left': str(remaining.get('player4', '0')),
+        'p5-points-left': str(remaining.get('player5', '0')),
+        'p6-points-left': str(remaining.get('player6', '0')),
+    }
+
     if msg['event'] == 'darts-thrown':
         val = str(msg['game']['dartValue'])
         variables = {
             'playername': msg['player'],
-            'score': val
+            'score': val,
+            **remaining_vars
             }
         if SCORE_EFFECTS[val] is not None:
-            control_pixelit(SCORE_EFFECTS[val], 'Darts-thrown: ' + val, variables)
+            control_pixelit(SCORE_EFFECTS[val], 'Darts-thrown: ' + val, variables, effect_arg='-S' + val)
         else:
             area_found = False
             ival = int(val)
@@ -242,50 +256,60 @@ def process_variant_x01(msg):
                 if SCORE_AREA_EFFECTS[SAE] is not None:
                     ((area_from, area_to), AREA_EFFECTS) = SCORE_AREA_EFFECTS[SAE]
                     if ival >= area_from and ival <= area_to:
-                        control_pixelit(AREA_EFFECTS, 'Darts-thrown: ' + val, variables)
+                        control_pixelit(AREA_EFFECTS, 'Darts-thrown: ' + val, variables, effect_arg='-A' + str(SAE))
                         area_found = True
                         break
             if area_found == False:
                 ppi('Darts-thrown: ' + val + ' - NOT configured!')
 
     elif msg['event'] == 'darts-pulled' and IDLE_EFFECTS is not None:
-        variables = {'playername': msg['player'], 
-                    'points-left': msg['game']['pointsLeft'], 
-                    }
-        control_pixelit(IDLE_EFFECTS, 'Darts-pulled', variables)
+        variables = {
+            'playername': msg['player'], 
+            'points-left': str(msg['game']['pointsLeft']),
+            **remaining_vars
+        }
+        control_pixelit(IDLE_EFFECTS, 'Darts-pulled', variables, effect_arg='-IDE')
 
     elif msg['event'] == 'busted' and BUSTED_EFFECTS is not None:
-        control_pixelit(BUSTED_EFFECTS, 'Busted!')
+        variables = {
+            'playername': msg['player'],
+            **remaining_vars
+        }
+        control_pixelit(BUSTED_EFFECTS, 'Busted!', variables, effect_arg='-B')
 
     elif msg['event'] == 'game-won' and GAME_WON_EFFECTS is not None:
-        score = msg['game']['dartsThrownValue']
-        variables = {'playername': msg['player'], 'score': score}
+        score = str(msg['game']['dartsThrownValue'])
+        variables = {'playername': msg['player'], 'score': score, **remaining_vars}
         if HIGH_FINISH_ON is not None and int(score) >= HIGH_FINISH_ON and HIGH_FINISH_EFFECTS is not None:
-            control_pixelit(HIGH_FINISH_EFFECTS, 'Game-won - HIGHFINISH', variables)
+            control_pixelit(HIGH_FINISH_EFFECTS, 'Game-won - HIGHFINISH', variables, effect_arg='-HF')
         elif GAME_WON_EFFECTS is not None:
-            control_pixelit(GAME_WON_EFFECTS, 'Game-won', variables)
+            control_pixelit(GAME_WON_EFFECTS, 'Game-won', variables, effect_arg='-G')
 
     elif msg['event'] == 'match-won' and MATCH_WON_EFFECTS is not None:
-        score = msg['game']['dartsThrownValue']
-        variables = {'playername': msg['player'], 'score': score}
+        score = str(msg['game']['dartsThrownValue'])
+        variables = {'playername': msg['player'], 'score': score, **remaining_vars}
         if HIGH_FINISH_ON is not None and int(score) >= HIGH_FINISH_ON and HIGH_FINISH_EFFECTS is not None:
-            control_pixelit(HIGH_FINISH_EFFECTS, 'Match-won - HIGHFINISH', variables)
+            control_pixelit(HIGH_FINISH_EFFECTS, 'Match-won - HIGHFINISH', variables, effect_arg='-HF')
         elif MATCH_WON_EFFECTS is not None:
-            control_pixelit(MATCH_WON_EFFECTS, 'Match-won', variables)
+            control_pixelit(MATCH_WON_EFFECTS, 'Match-won', variables, effect_arg='-M')
 
     elif msg['event'] == 'match-started' and MATCH_START_EFFECTS is not None:
-        variables = {'playername': msg['player'], 
-                     'game-mode': msg['game']['mode'], 
-                     'game-mode-extra': msg['game']['pointsStart']
-                     }
-        control_pixelit(MATCH_START_EFFECTS, 'Match-started', variables)
+        variables = {
+            'playername': msg['player'], 
+            'game-mode': msg['game']['mode'], 
+            'game-mode-extra': str(msg['game']['pointsStart']),
+            **remaining_vars
+        }
+        control_pixelit(MATCH_START_EFFECTS, 'Match-started', variables, effect_arg='-MS')
 
     elif msg['event'] == 'game-started' and GAME_START_EFFECTS is not None:
-        variables = {'playername': msg['player'], 
-                    'game-mode': msg['game']['mode'], 
-                    'game-mode-extra': msg['game']['pointsStart']
-                    }
-        control_pixelit(GAME_START_EFFECTS, 'Game-started', variables)
+        variables = {
+            'playername': msg['player'], 
+            'game-mode': msg['game']['mode'], 
+            'game-mode-extra': str(msg['game']['pointsStart']),
+            **remaining_vars
+        }
+        control_pixelit(GAME_START_EFFECTS, 'Game-started', variables, effect_arg='-GS')
     
 
 
@@ -450,7 +474,7 @@ if __name__ == "__main__":
         # ppi(parsed_score_area)
 
 
-    control_pixelit(APP_START_EFFECTS, "App-started", wake_up=True)
+    control_pixelit(APP_START_EFFECTS, "App-started", wake_up=True, effect_arg='-AS')
 
     try:
         connect_data_feeder()

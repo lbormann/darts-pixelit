@@ -1,3 +1,7 @@
+## 1.3.1
+- minor fixes and improvements to multiple endpoint support
+- add possibility to display remeining player scores for each player
+
 ## 1.3.0
 - add support for multiple PixelIt endpoints with `e:` parameter 
 

@@ -14,7 +14,7 @@
             "args": [   "-PEPS=192.168.1.117",
                         // "-CON=192.168.1.86:8079",
                         "-TP=Z:\\Github\\caller test\\pixelit",
-                        "-IDE=\"simple|t:{points-left}\"",
+                        "-IDE=\"simple|t:{p2-points-left}|e:0\"",
                         "-GS=\"board|t:Game{}on{}{playername}\"",
                         "-AS=\"call|t:Lets{}Play{}Darts{}-==-<\"",
                         "-MS=\"board|t:{game-mode}:{}{game-mode-extra}\"",

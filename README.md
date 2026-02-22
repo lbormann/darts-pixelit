@@ -251,19 +251,36 @@ _ _ _ _ _ _ _ _ _ _
 
 | Argument | Variables |
 | --  | -- |
-| -HF | {playername}, {score} | 
+| -HF | {playername}, {score}, {p1-points-left} .. {p6-points-left} | 
 | -AS | | 
-| -IDE | {playername}, {points-left} |
-| -MS | {game-mode}, {game-mode-extra}, {playername} | 
-| -GS | {game-mode}, {game-mode-extra}, {playername} | 
-| -G | {playername}, {score} | 
-| -M | {playername}, {score} | 
-| -B | | 
+| -IDE | {playername}, {points-left}, {p1-points-left} .. {p6-points-left} |
+| -MS | {game-mode}, {game-mode-extra}, {playername}, {p1-points-left} .. {p6-points-left} | 
+| -GS | {game-mode}, {game-mode-extra}, {playername}, {p1-points-left} .. {p6-points-left} | 
+| -G | {playername}, {score}, {p1-points-left} .. {p6-points-left} | 
+| -M | {playername}, {score}, {p1-points-left} .. {p6-points-left} | 
+| -B | {playername}, {p1-points-left} .. {p6-points-left} | 
 | -PJ | {playername} | 
 | -PL | {playername} | 
-| -S(1-180) | {playername}, {score} | 
-| -A(1-12) | {playername}, {score} | 
+| -S(1-180) | {playername}, {score}, {p1-points-left} .. {p6-points-left} | 
+| -A(1-12) | {playername}, {score}, {p1-points-left} .. {p6-points-left} | 
 
+
+### Text Variables overview
+
+| Variable | Description | Available in |
+| -- | -- | -- |
+| `{playername}` | Name of the current player | -HF, -IDE, -MS, -GS, -G, -M, -PJ, -PL, -S, -A, -B |
+| `{score}` | Points scored in the current throw / finish score | -HF, -G, -M, -S, -A |
+| `{points-left}` | Remaining points of the current player | -IDE |
+| `{p1-points-left}` | Remaining points of player 1 | All X01 events (-IDE, -S, -A, -G, -M, -HF, -B, -MS, -GS) |
+| `{p2-points-left}` | Remaining points of player 2 | All X01 events (-IDE, -S, -A, -G, -M, -HF, -B, -MS, -GS) |
+| `{p3-points-left}` | Remaining points of player 3 | All X01 events (-IDE, -S, -A, -G, -M, -HF, -B, -MS, -GS) |
+| `{p4-points-left}` | Remaining points of player 4 | All X01 events (-IDE, -S, -A, -G, -M, -HF, -B, -MS, -GS) |
+| `{p5-points-left}` | Remaining points of player 5 | All X01 events (-IDE, -S, -A, -G, -M, -HF, -B, -MS, -GS) |
+| `{p6-points-left}` | Remaining points of player 6 | All X01 events (-IDE, -S, -A, -G, -M, -HF, -B, -MS, -GS) |
+| `{game-mode}` | Current game mode (e.g., X01, Cricket) | -MS, -GS |
+| `{game-mode-extra}` | Additional game mode info (e.g., starting points like 501) | -MS, -GS |
+| `{}` | Placeholder for a space character in text | All arguments with `t:` parameter |
 
 ### Endpoint-Targeting
 
