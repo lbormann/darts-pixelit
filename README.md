@@ -136,7 +136,7 @@ Click on the shortcut to start the application.
     
 #### *`-PEPS / --pixelit_endpoints`*
 
-<p>IP to your PIXELIT. You can define multiple entries. For example: '192.168.3.200' '192.168.3.201'.</p>
+<p>IP to your PIXELIT. You can define multiple entries. For example: 192.168.3.200 192.168.3.201.</p>
 
 #### *`-TP / --templates_path`*
 
